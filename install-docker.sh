@@ -9,16 +9,16 @@
 # * 80, 4444, and 8080 open for HTTP traffic
 
 # Prerequisite software for Docker
-apt-get update
-apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+apt update
+apt install -y apt-transport-https ca-certificates curl software-properties-common
 
 # Use the Docker repository directly for the latest and greatest version
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-apt-get update
+apt update
 
-# Install Docker Community Edition and the Redis command-line interface
-apt-get install -y docker-ce redis-tools
+# Install Docker Community Edition
+apt install -y docker-ce
 
 # Install Docker Compose (but not the Ubuntu package that requires an X11 display)
 curl -L "https://github.com/docker/compose/releases/download/latest/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose

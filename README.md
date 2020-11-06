@@ -2,7 +2,7 @@
 
 A hands-on introduction to using Docker. By the end of the workshop you should be able to run Docker containers, build Docker images interactively, and use a `Dockerfile` to create a Docker image with code.
 
-It covers working with Docker images and containers. It does not cover Docker installation, although if you can create an Ubuntu VM there is a script below that will .
+It covers working with Docker images and containers. It does not cover Docker installation, although if you can create an Ubuntu VM there is a script below that will install the required software.
 
 ## Prerequisites
 

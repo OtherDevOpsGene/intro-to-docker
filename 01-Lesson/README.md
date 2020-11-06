@@ -1,4 +1,4 @@
-# Lesson 1- Our First Containers
+# Lesson 1- Use Our First Containers
 
 ## What are containers
 
@@ -44,8 +44,7 @@ For more examples and ideas, visit:
  https://docs.docker.com/get-started/
 ```
 
-The [docker run](https://docs.docker.com/engine/reference/run/
-) command:
+The [docker run](https://docs.docker.com/engine/reference/run/) command:
 
 * looks in the image cache for the image
 * downloads the image from Docker Hub (_if needed_)
@@ -105,11 +104,10 @@ CONTAINER ID    IMAGE          COMMAND        CREATED          STATUS           
 4892031f16d3    ubuntu         "/bin/bash"    2 minutes ago    Up 2 minutes                         pedantic_elgamal
 ```
 
-The [docker ps](https://docs.docker.com/engine/reference/commandline/ps/
-) command shows list of running containers (currently, only one). You could also run with `-a` to show all containers, running and stopped. You'll see our current container (`4892031f16d3`), the first Ubuntu container we exited (`c80be7b31bbb`), and Hello World (`5ba9cbef69b8`), although your IDs will be different.
+The [docker ps](https://docs.docker.com/engine/reference/commandline/ps/) command shows list of running containers (currently, only one). You could also run with `-a` to show all containers, running and stopped. You'll see our current container (`4892031f16d3`), the first Ubuntu container we exited (`c80be7b31bbb`), and Hello World (`5ba9cbef69b8`), although your IDs will be different.
 
 ```console
-PS C:\Users\GotimerEugene> docker ps -a
+$ docker ps -a
 CONTAINER ID    IMAGE          COMMAND        CREATED          STATUS                      PORTS    NAMES
 4892031f16d3    ubuntu         "/bin/bash"    4 minutes ago    Up 4 minutes                         pedantic_elgamal
 c80be7b31bbb    ubuntu         "/bin/bash"    7 minutes ago    Exited (0) 4 minutes ago             cool_leakey
@@ -163,7 +161,7 @@ $ docker run ggotimer/chuck-norris-1 wget 'http://api.icndb.com/jokes/random?exc
 Or you can try an even more unwieldy command.
 
 ```console
-$ docker run ggotimer/chuck-norris-1 bash -c "wget 'http://api.icndb.com/jokes/random?exclude=[explicit]' -qO- | jshon -e value -e joke -u | recode html | /usr/games/cowsay"
+$ docker run ggotimer/chuck-norris-1 /bin/bash -c "wget 'http://api.icndb.com/jokes/random?exclude=[explicit]' -qO- | jshon -e value -e joke -u | recode html | /usr/games/cowsay"
  _____________________________________
 / Chuck Norris always knows the EXACT \
 \ location of Carmen SanDiego.        /
@@ -175,4 +173,4 @@ $ docker run ggotimer/chuck-norris-1 bash -c "wget 'http://api.icndb.com/jokes/r
                 ||     ||
 ```
 
-We will make it easier to run, and to create, in [Lesson 2- Building Images](02-Lesson.md).
+We will make it easier to run, and to create, in [Lesson 2- Build an Image with Code](../02-Lesson/README.md).
