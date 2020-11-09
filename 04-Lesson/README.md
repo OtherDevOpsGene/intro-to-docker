@@ -5,4 +5,3 @@
 ## A Static Web site
 
 ## A PHP Web site
-
