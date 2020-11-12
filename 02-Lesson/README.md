@@ -33,7 +33,7 @@ Notice that those commands match what we did in the last lesson very closely.
 Now tell Docker to assemble the image and name it using [docker build](https://docs.docker.com/engine/reference/commandline/build/).
 
 ```console
-$ docker build -t ggotimer/chuck-norris-2 .
+$ docker build --tag ggotimer/chuck-norris-2 .
 [+] Building 42.5s (6/6) FINISHED
  => [internal] load build definition from Dockerfile                                                               0.0s
  => => transferring dockerfile: 32B                                                                                0.0s
@@ -48,14 +48,14 @@ $ docker build -t ggotimer/chuck-norris-2 .
  => => naming to docker.io/ggotimer/chuck-norris-2                                                                 0.0s
  ```
 
-* `-t ggotimer/chuck-norris-2` tells Docker to name the image `ggotimer/chuck-norris-2` (you should use your own Docker Hub username or your name if you don't have one)
+* `--tag ggotimer/chuck-norris-2` tells Docker to name the image `ggotimer/chuck-norris-2` (you should use your own Docker Hub username or your name if you don't have one)
 * `.` the period means the current directory, so Docker will put this directory and everything beneath it into the image, which is why it had to start with an empty directory
 * by default it finds the `Dockerfile` in the specified directory (we specified the current directory, so `./Dockerfile`)
 
 If you run that same command again, you'll notice that the buld was almost instantaneous and the results of each step were cached. That is important to keep in mind. Docker doesn't rebuild something if it thinks it knows the results of the step even if you don't want that to happen (e.g., one of the steps fetches the contents of a dynamic resource).
 
 ```console
-$ docker build -t ggotimer/chuck-norris-2 .
+$ docker build --tag ggotimer/chuck-norris-2 .
 [+] Building 0.0s (6/6) FINISHED
  => [internal] load build definition from Dockerfile                                                               0.0s
  => => transferring dockerfile: 38B                                                                                0.0s

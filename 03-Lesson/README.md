@@ -36,7 +36,7 @@ This `Dockerfile` has a few new features.
 Build it with `docker build` as before.
 
 ```console
-$ docker build -t ggotimer/helloworld .
+$ docker build --tag ggotimer/helloworld .
 [+] Building 467.1s (9/9) FINISHED
  => [internal] load .dockerignore                                                                                  0.0s
  => => transferring context: 2B                                                                                    0.0s
@@ -104,7 +104,7 @@ We are using a [multi-stage build](https://docs.docker.com/develop/develop-image
 Build it with `docker build` and tag it as `small` to make it easy to identify.
 
 ```console
-$ docker build -t ggotimer/helloworld .
+$ docker build --tag ggotimer/helloworld .
 ...
 $ docker run ggotimer/helloworld
 Hello, World! The current time is 3:37:12 PM on November 6, 2020.
@@ -240,7 +240,7 @@ CMD ["java", "-cp", "/helloworld-1.0.jar", "com.steampunk.helloworld.HelloWorld"
 Build it `docker build`, tagging it as `local`, and then run it.
 
 ```console
-$ docker build -t ggotimer/helloworld:local .
+$ docker build --tag ggotimer/helloworld:local .
 [+] Building 0.8s (7/7) FINISHED
  => [internal] load .dockerignore                                                                                  0.0s
  => => transferring context: 2B                                                                                    0.0s
@@ -264,12 +264,12 @@ Feel free to change the source code in `src/main/java/com/steampunk/helloworld/H
 ```console
 $ nano src/main/java/com/steampunk/helloworld/HelloWorld.java
 ...
-$ docker run -it --rm --name maven -v ${PWD}:/usr/src/maven -v ${HOME}/.m2:/root/.m2 --workdir /usr/src/maven maven:3.6.3-jdk-11 mvn clean package
+$ docker run -it --rm --name maven --volume ${PWD}:/usr/src/maven --volume ${HOME}/.m2:/root/.m2 --workdir /usr/src/maven maven:3.6.3-jdk-11 mvn clean package
 ...
-ggotimer@GOTIMERE-LT:~/git/intro-to-docker/03-Lesson/temp/helloworld$ docker build -t ggotimer/helloworld:local .
+$ docker build --tag ggotimer/helloworld:local .
 ...
 $ docker run ggotimer/helloworld:local
 I just changed this! The current time is 5:10:16 PM on November 6, 2020.
 ```
 
-We will use this technique again later, but next we will look into using more Docker Hub images in [Lesson 4- Use Pre-Built Images](../04-Lesson/README.md).
+We will use this technique again as we will look into using more Docker Hub images in [Lesson 4- Use Pre-Built Images](../04-Lesson/README.md).

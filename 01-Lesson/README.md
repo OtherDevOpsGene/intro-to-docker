@@ -75,8 +75,8 @@ root@aaa1321d8df8:/#
 
 You are dropped into a root shell (`/bin/bash`) on the container, and the container is still running.
 
-* `-i` keeps STDIN open
-* `-t` allocates a terminal
+* `-i` keeps STDIN open (short for `--interactive`)
+* `-t` allocates a terminal (short for `--tty`)
 * `/bin/bash` specifies the command to run, rather than the default
 
 At the root prompt, `exit` and then invoke another container with `docker run -it ubuntu /bin/bash` and run `apt update` to download Ubuntu's software index to the container, and then `apt install -y wget cowsay recode jshon` to install some packages. __Leave the container running at the root prompt.__
@@ -104,7 +104,7 @@ CONTAINER ID    IMAGE          COMMAND        CREATED          STATUS           
 4892031f16d3    ubuntu         "/bin/bash"    2 minutes ago    Up 2 minutes                         pedantic_elgamal
 ```
 
-The [docker ps](https://docs.docker.com/engine/reference/commandline/ps/) command shows list of running containers (currently, only one). You could also run with `-a` to show all containers, running and stopped. You'll see our current container (`4892031f16d3`), the first Ubuntu container we exited (`c80be7b31bbb`), and Hello World (`5ba9cbef69b8`), although your IDs will be different.
+The [docker ps](https://docs.docker.com/engine/reference/commandline/ps/) command shows list of running containers (currently, only one). You could also run with `-a` (short for `--all`) to show all containers, running and stopped. You'll see our current container (`4892031f16d3`), the first Ubuntu container we exited (`c80be7b31bbb`), and Hello World (`5ba9cbef69b8`), although your IDs will be different.
 
 ```console
 $ docker ps -a

@@ -1,4 +1,4 @@
-# Introuction to Docker
+# Introduction to Docker
 
 A hands-on introduction to using Docker. By the end of the workshop you should be able to run Docker containers, build Docker images interactively, and use a `Dockerfile` to create a Docker image with code.
 
