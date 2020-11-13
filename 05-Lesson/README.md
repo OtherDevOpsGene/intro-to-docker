@@ -310,4 +310,22 @@ Removing solarsystem_nginx_1        ... done
 
 To remove the data from the MongoDB, you'll have to remove the directory on the host that we mounted as a volume, `solarsystem/mongodb/data`. The `data` directory will be recreated if you start the MongoDB container again.
 
+You'll have to run `docker-compose rm` in the `selenium` directory as well. Adding `--stop --force` will stop the containers and remove them without confirmation so you don't have to use two commands.
+
+```console
+$ cd selenium/
+$ docker-compose rm --stop --force
+Stopping selenium_firefox81_1 ... done
+Stopping selenium_chrome86_1  ... done
+Stopping selenium_firefox80_1 ... done
+Stopping selenium_chrome85_1  ... done
+Stopping selenium_hub_1       ... done
+Going to remove selenium_firefox81_1, selenium_chrome86_1, selenium_firefox80_1, selenium_chrome85_1, selenium_hub_1
+Removing selenium_firefox81_1 ... done
+Removing selenium_chrome86_1  ... done
+Removing selenium_firefox80_1 ... done
+Removing selenium_chrome85_1  ... done
+Removing selenium_hub_1       ... done
+```
+
 ## The end
