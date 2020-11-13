@@ -98,7 +98,7 @@ Open your browser and point to the new web site with <http://localhost/> (or the
 
 You can view the [index.php](https://github.com/SteampunkFoundry/solarsystem/blob/main/nginx/docroot/index.php) source code to see how it is accessing the database.
 
-If you want to explore further, you'll see that the `planets.css` style sheet is being served by Nginx, as is `index.html` and any other HTML file you added to the `solarsystem/nginx/docroot/` directory in the previous lesson. Nginx is passing the request for the default index page (aka `index.php`) to the `php` container on port 9000 because of our [site.conf](https://github.com/SteampunkFoundry/solarsystem/blob/main/nginx/site.conf) configuration.
+If you want to explore further, you'll see that the `planets.css` style sheet is being served by Nginx, as is `index.html` and any other HTML file you added to the `solarsystem/nginx/docroot/` directory in the previous lesson. Nginx is passing the request for the default index page (aka `index.php`) to the `php` container on port 9000 because of our [site.conf](https://github.com/SteampunkFoundry/solarsystem/blob/main/nginx/site.conf#L12) configuration.
 
 ## Bringing up Selenium Grid
 
@@ -232,7 +232,7 @@ org.opentest4j.AssertionFailedError: Pluto is a Planet ==> expected: <true> but 
 
 The tests ran, but one failed because Pluto is not listed as a planet. We'll add that next to meet the test's expectation.
 
-Notice that all four tests ran concurrently on different browsers due to our configuration of the Maven Failsafe Plugin in the [POM](https://github.com/SteampunkFoundry/solarsystem/blob/main/selenium/pom.xml).
+Notice that all four tests ran concurrently on different browsers due to our configuration of the Maven Failsafe Plugin in the [POM](https://github.com/SteampunkFoundry/solarsystem/blob/main/selenium/pom.xml#L58-L61).
 
 ```xml
               <configurationParameters>
