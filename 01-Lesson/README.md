@@ -6,7 +6,9 @@ Docker isn't the only container technology out there, but it is certainly the mo
 
 An _image_ is a software bundle that will run on a Docker host. A _container_ is an instance of that image, running or stopped. Images are the cookie cutters; containers are the cookies.
 
-An image is made up of multiple layers of software (each an image itself) along with the metadata about how it should be assembled. Containers are read-only copies of those images with a thin read-write layer on top for the ephemeral instance data. We'll see more about this later. ![Ubuntu layers](ubuntu-layers.png?raw=true "Layers in Docker containers")
+An image is made up of multiple layers of software (each an image itself) along with the metadata about how it should be assembled. Containers are read-only copies of those images with a thin read-write layer on top for the ephemeral instance data. We'll see more about this later.
+
+![Ubuntu layers](ubuntu-layers.png?raw=true "Layers in Docker containers")
 
 Because of this, containers can be used as immutable infrastructure. The images can be cloned and spun up and restarted and destroyed as needed, knowing that a new copy can be instantiated as needed. Don't get too attached to any particular instance. They are __cattle, not pets__.
 
