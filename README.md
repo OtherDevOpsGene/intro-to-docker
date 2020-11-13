@@ -18,7 +18,7 @@ Ensure that you are ready by invoking the `docker` command from the command line
 docker --version
 ```
 
-If the command works and you get a response similar to below, you are ready to proceed with [Lesson 1- Our First Containers](01-Lesson.md).
+If the command works and you get a response similar to below, you are ready to proceed with [Lesson 1- Our First Containers](01-Lesson/README.md).
 
 ```bash
 Docker version 19.03.13, build 4484c46d9d
