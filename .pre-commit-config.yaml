@@ -11,3 +11,7 @@ repos:
     hooks:
     -   id: docker-compose-check
     -   id: hadolint
+-   repo: https://github.com/markdownlint/markdownlint
+    rev: 02832ed3bc0681e72117663c6f8802ce878bf908
+    hooks:
+    -   id: markdownlint_docker
