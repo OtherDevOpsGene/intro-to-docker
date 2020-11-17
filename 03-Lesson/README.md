@@ -2,14 +2,15 @@
 
 ## Build a Big Image
 
-Let's build an image that runs a Java application. Since it is more about the building than about what we are building, we'll build a Hello World app.
+Let's build an image that runs a Java application. Since it is more about the
+building than about what we are building, we'll build a Hello World app.
 
 Create an empty directory to work in. In that directory, create a `Dockerfile`:
 
 ```console
-$ mkdir helloworld
-$ cd helloworld
-$ nano Dockerfile
+mkdir helloworld
+cd helloworld
+nano Dockerfile
 ```
 
 Add the [following contents](helloworld/Dockerfile):
@@ -30,7 +31,9 @@ CMD ["java", "-cp", "/helloworld/target/helloworld-1.0.jar", "com.steampunk.hell
 This `Dockerfile` has a few new features.
 
 * `RUN` appears multiple times, which will mean multiple layers in our image
-* This `apt-get install` command is more complicated than before in that it cleans up after itself. Given the popularity of Ubuntu as a base image, this pattern appears often.
+* This `apt-get install` command is more complicated than before in that it
+  cleans up after itself. Given the popularity of Ubuntu as a base image, this
+  pattern appears often.
 * `WORKDIR` changes the directory we are in while on the container
 
 Build it with `docker build` as before.
@@ -54,7 +57,10 @@ $ docker build --tag ggotimer/helloworld .
  => => naming to docker.io/ggotimer/helloworld                                                                     0.0s
  ```
 
-Despite being a Hello World program, there is quite a bit we have to install for the image (e.g., _Java_, _Maven_, _Git_) and we have to compile the application which means Maven has a lot of plugins and dependencies to download. So this might take a while.
+Despite being a Hello World program, there is quite a bit we have to install for
+the image (e.g., _Java_, _Maven_, _Git_) and we have to compile the application
+which means Maven has a lot of plugins and dependencies to download. So this
+might take a while.
 
 Use `docker run` to create a container:
 
@@ -63,7 +69,9 @@ $ docker run ggotimer/helloworld
 Hello, World! The current time is 2:19:52 PM on November 6, 2020.
 ```
 
-Let's tag this version of the image with [docker tag](https://docs.docker.com/engine/reference/commandline/tag/) so we can compare it later to an improved version.
+Let's tag this version of the image with
+[docker tag](https://docs.docker.com/engine/reference/commandline/tag/) so we
+can compare it later to an improved version.
 
 ```console
 $ docker tag ggotimer/helloworld ggotimer/helloworld:big
@@ -94,12 +102,17 @@ COPY --from=development /helloworld/target/helloworld-1.0.jar /
 CMD ["java", "-cp", "/helloworld-1.0.jar", "com.steampunk.helloworld.HelloWorld"]
 ```
 
-We are using a [multi-stage build](https://docs.docker.com/develop/develop-images/multistage-build/#use-multi-stage-builds) by including multple `FROM` statements.
+We are using a [multi-stage build](https://docs.docker.com/develop/develop-images/multistage-build/#use-multi-stage-builds)
+by including multple `FROM` statements.
 
-* `AS development` names the first stage. Without naming, we'd refer to the first stage by number which could change if additional stages were added later.
-* `FROM openjdk:11-jre-slim AS runtime` pulls a new Docker image down for the second stage and uses that for the new base image
-* `COPY --from=development` takes a file from the first stage, `development`, and puts it in place on the second stage, `runtime`
-* The `helloworld-1.0.jar` file is now at the root where we copied it, so the `CMD` has to change slightly
+* `AS development` names the first stage. Without naming, we'd refer to the
+  first stage by number which could change if additional stages were added later.
+* `FROM openjdk:11-jre-slim AS runtime` pulls a new Docker image down for the
+  second stage and uses that for the new base image.
+* `COPY --from=development` takes a file from the first stage, `development`,
+  and puts it in place on the second stage, `runtime`.
+* The `helloworld-1.0.jar` file is now at the root where we copied it, so the
+  `CMD` has to change slightly.
 
 Build it with `docker build` and tag it as `small` to make it easy to identify.
 
@@ -116,7 +129,10 @@ ggotimer/helloworld   small               5ae35dc2a904        About a minute ago
 ggotimer/helloworld   big                 7a12642472bc        2 hours ago          626MB
 ```
 
-Notice the size difference. The `small` version we just built doesn't have the JDK installed, just the JRE. Maven and Git aren't installed, nor are the artifacts and libraries they used during compilation (we left them all on the first stage image).
+Notice the size difference. The `small` version we just built doesn't have the
+JDK installed, just the JRE. Maven and Git aren't installed, nor are the
+artifacts and libraries they used during compilation (we left them all on the
+first stage image).
 
 The size differences are really highlighted when you look at the layers.
 
@@ -148,13 +164,21 @@ IMAGE               CREATED             CREATED BY                              
 <missing>           3 weeks ago         /bin/sh -c #(nop) ADD file:0dc53e7886c35bc21…   69.2MB
 ```
 
-The bottom layer is similar in size, but the `small` variant only needed 127MB for the JRE versus 544MB for the JDK, Maven, and Git. Plus the Maven build was 9.27MB whereas the `jar` file is only 3.17kB by itself.
+The bottom layer is similar in size, but the `small` variant only needed 127MB
+for the JRE versus 544MB for the JDK, Maven, and Git. Plus the Maven build was
+9.27MB whereas the `jar` file is only 3.17kB by itself.
 
-Using multi-stage builds and more targeted, smaller base images to shrink Docker images to as small as feasible is a common theme in Docker. There is more information available on [Dockerfile best practices](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/).
+Using multi-stage builds and more targeted, smaller base images to shrink Docker
+images to as small as feasible is a common theme in Docker. There is more
+information available on
+[Dockerfile best practices](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/).
 
 ## Push to Docker Hub
 
-If you have a Docker Hub account, you can push your images there so that others can find and use them. You'll need to [docker login](https://docs.docker.com/engine/reference/commandline/login/), possibly supplying your personal access token, and then [docker push](https://docs.docker.com/engine/reference/commandline/push/).
+If you have a Docker Hub account, you can push your images there so that others
+can find and use them. You'll need to [docker login](https://docs.docker.com/engine/reference/commandline/login/),
+possibly supplying your personal access token, and then
+[docker push](https://docs.docker.com/engine/reference/commandline/push/).
 
 ```console
 $ docker push ggotimer/helloworld
@@ -181,15 +205,27 @@ d0fe97fa8b8c: Layer already exists
 small: digest: sha256:b87f4bd0feb0dcd22d65433e11697a75075af162947a0765ccecdfffd4c977d5 size: 1367
 ```
 
-You'll see that Docker pushes all the versions of `ggotimer/helloworld` were pushed and any layers that Docker Hub already knew about were cached. You can see the resulting [ggotimer/helloworld](https://hub.docker.com/repository/docker/ggotimer/helloworld) repository for me on Docker Hub.
+You'll see that Docker pushes all the versions of `ggotimer/helloworld` were
+pushed and any layers that Docker Hub already knew about were cached. You can
+see the resulting [ggotimer/helloworld](https://hub.docker.com/repository/docker/ggotimer/helloworld)
+repository for me on Docker Hub.
 
 ## Build a Better Workspace
 
-While that was nice for a finished product, you wouldn't want to work like that if you were actively developing Hello World (or any other application). We downloaded and embedded the entire Git repository in the image building process. Every change we made to the code would need to be committed before we could test it as an image. We also downloaded (and ultimately discarded) all the Maven libraries for every build.
+While that was nice for a finished product, you wouldn't want to work like that
+if you were actively developing Hello World (or any other application). We
+downloaded and embedded the entire Git repository in the image building process.
+Every change we made to the code would need to be committed before we could test
+it as an image. We also downloaded (and ultimately discarded) all the Maven
+libraries for every build.
 
-A better option would be to work on the source code locally and cache all of the Maven dependencies between runs. In fact, we can cache them in the same place our local Maven caches them, so we never have to redownload them. We can do this using volumes.
+A better option would be to work on the source code locally and cache all of the
+Maven dependencies between runs. In fact, we can cache them in the same place
+our local Maven caches them, so we never have to redownload them. We can do this
+using volumes.
 
-Checkout the source code from GitHub and switch into that directory, just as the `Dockerfile` did.
+Checkout the source code from GitHub and switch into that directory, just as the
+`Dockerfile` did.
 
 ```console
 $ git clone https://github.com/SteampunkFoundry/helloworld.git
@@ -202,7 +238,11 @@ Receiving objects: 100% (16/16), 6.98 KiB | 6.98 MiB/s, done.
 $ cd helloworld
 ```
 
-Then run Maven from a container. The `maven` image expects the source code to be in `/usr/src/maven` on the container, but we can tell Maven to treat our local directory as `/usr/src/maven`. Also, Maven caches it's dependencies in `/root/.m2`, so we can have Docker point our local `~/.m2` directory to `/root/.m2` on the container.
+Then run Maven from a container. The `maven` image expects the source code to be
+in `/usr/src/maven` on the container, but we can tell Maven to treat our local
+directory as `/usr/src/maven`. Also, Maven caches it's dependencies in
+`/root/.m2`, so we can have Docker point our local `~/.m2` directory to
+`/root/.m2` on the container.
 
 ```console
 $ docker run -it --rm --volume ${PWD}:/usr/src/maven --volume ${HOME}/.m2:/root/.m2 --workdir /usr/src/maven maven:3.6.3-jdk-11 mvn clean package
@@ -218,15 +258,25 @@ $ docker run -it --rm --volume ${PWD}:/usr/src/maven --volume ${HOME}/.m2:/root/
 ```
 
 * `--rm` automatically removes the container when it exits
-* `--volume ${PWD}:/usr/src/maven` mounts our current directory (`PWD`) as `/usr/src/maven` on the container
-* `--volume ${HOME}/.m2:/root/.m2` mounts our local Maven cache as `/root/.m2` on the container
-* `--workdir /usr/src/maven` changes directories on the container, just as `WORKDIR` does in the `Dockerfile`
-* `maven:3.6.3-jdk-11` is the [Maven image](https://hub.docker.com/_/maven) to use from Docker Hub, and we have specified a particular Maven version (`3.6.3`) and a particular JDK to use (`11`) by choosing the appropriately tagged image name
+* `--volume ${PWD}:/usr/src/maven` mounts our current directory (`PWD`) as
+  `/usr/src/maven` on the container
+* `--volume ${HOME}/.m2:/root/.m2` mounts our local Maven cache as `/root/.m2`
+  on the container
+* `--workdir /usr/src/maven` changes directories on the container, just as
+  `WORKDIR` does in the `Dockerfile`
+* `maven:3.6.3-jdk-11` is the [Maven image](https://hub.docker.com/_/maven) to
+  use from Docker Hub, and we have specified a particular Maven version
+  (`3.6.3`) and a particular JDK to use (`11`) by choosing the appropriately
+  tagged image name
 * `mvn clean package` is the Maven command to run
 
-The first time we run this might take a few minutes to download the image and any Maven dependencies we didn't already have cached, but running it a second time goes much quicker.
+The first time we run this might take a few minutes to download the image and
+any Maven dependencies we didn't already have cached, but running it a second
+time goes much quicker.
 
-We can build the Docker image by creaing a [Dockerfile](helloworld-local/Dockerfile) that copies the `jar` file from our local directory, which looks almost identical to the tail of our previous `Dockerfile`.
+We can build the Docker image by creaing a [Dockerfile](helloworld-local/Dockerfile)
+that copies the `jar` file from our local directory, which looks almost
+identical to the tail of our previous `Dockerfile`.
 
 ```Dockerfile
 FROM openjdk:11-jre-slim AS runtime
@@ -259,7 +309,8 @@ $ docker run ggotimer/helloworld:local
 Hello, World! The current time is 5:06:30 PM on November 6, 2020.
 ```
 
-Feel free to change the source code in `src/main/java/com/steampunk/helloworld/HelloWorld.java` and recompile, rebuild, and rerun to see that the changes are being reflected.
+Feel free to change the source code in `src/main/java/com/steampunk/helloworld/HelloWorld.java`
+and recompile, rebuild, and rerun to see that the changes are being reflected.
 
 ```console
 $ nano src/main/java/com/steampunk/helloworld/HelloWorld.java
@@ -272,4 +323,5 @@ $ docker run ggotimer/helloworld:local
 I just changed this! The current time is 5:10:16 PM on November 6, 2020.
 ```
 
-We will use this technique again as we will look into using more Docker Hub images in [Lesson 4- Use Pre-Built Images](../04-Lesson/README.md).
+We will use this technique again as we will look into using more Docker Hub
+images in [Lesson 4- Use Pre-Built Images](../04-Lesson/README.md).
