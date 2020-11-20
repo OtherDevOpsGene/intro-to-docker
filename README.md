@@ -31,17 +31,14 @@ containers that run concurrently in that lesson.
 Ensure that you are ready by invoking the `docker` command from the command
 line.
 
-```bash
-docker --version
-```
-
-If the command works and you get a response similar to below, you are ready to
-proceed with [Lesson 1- Our First Containers](01-Lesson/README.md).
-
-```bash
+```console
+$ docker --version
 Docker version 19.03.13, build 4484c46d9d
 ```
 
 The exact version and build number are not critical to this workshop.
+
+If the command works and you get a response similar to below, you are ready to
+proceed with [Lesson 1- Our First Containers](01-Lesson/README.md).
 
 Good luck!
