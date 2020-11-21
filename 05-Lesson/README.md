@@ -9,7 +9,7 @@ In a production environment, we would be much more likely to use a container
 orchestration tool like [Kubernetes](https://kubernetes.io/) to run the Docker
 cluster on multiple hosts and to handle upgrades, scaling, fail over, etc.
 
-## Stand up a PHP Web site with one command
+## Stand up a PHP web site with one command
 
 In the `solarsystem/` Git repository you cloned in the previous lesson there is a
 [docker-compose.yaml](https://github.com/SteampunkFoundry/solarsystem/blob/main/docker-compose.yaml)
@@ -69,12 +69,12 @@ Most of the directives match the Docker arguments, but there are a few new ones:
   exposed those ports in the image (via `EXPOSE` statements in their
   `Dockerfile`), but I wanted to call attention to them.
 * `depends_on` tells Compose to wait to start a container until the container it
-  depends on is start, but that doesn't mean the application running on the
-  container will be ready necessarily.
-* `restart` tells Compose what to do if the container exits. In our sitation,
-  `mongoexpress` will exit with a failure if it cannot connect to `mongo` which
-  will happen if it comes up before `mongo` is ready. We just have it restart to
-  try connecting to `mongo` again.
+  depends on is started (but that doesn't necessarily mean the application
+  running on the container will be ready).
+* `restart` tells Compose what to do if the container exits. In happen to know
+  that `mongoexpress` will exit with a failure if it cannot connect to `mongo`
+  which will happen if it comes up before `mongo` is ready. So we'll have it
+  restart on failure to try connecting to `mongo` again.
 
 In the `php` service, we specify a directory to `build` rather than an `image`
 to start. The `build` executes on the [Dockerfile](https://github.com/SteampunkFoundry/solarsystem/blob/main/php/Dockerfile)
@@ -87,26 +87,28 @@ Start the cluster with the [docker-compose up](https://docs.docker.com/compose/r
 command.
 
 ```console
+$ cd ~/solarsystem/
 $ docker-compose up -d
 Creating network "solarsystem_default" with the default driver
 Building php
 ...
-Successfully built 54d0be8073eb
+Successfully built 35313d1d8184
 Successfully tagged solarsystem_php:latest
-Starting solarsystem_php_1   ... done
-Starting solarsystem_nginx_1         ... done
-Starting solarsystem_mongo_1 ... done
-Starting solarsystem_mongoexpress_1 ... done
+...
+Creating solarsystem_mongo_1 ... done
+Creating solarsystem_php_1   ... done
+Creating solarsystem_nginx_1        ... done
+Creating solarsystem_mongoexpress_1 ... done
 ```
 
 As with `docker run`, the `-d` option runs the containers in detached mode.
 Because we are in a directory named `solarsystem`, the image and container names
-are all prefixed with `solarsystem_`. The first instance of each container gets
-suffixed with a `_1`. (We didn't bring up any more than one of any of them.)
+are all prefixed with `solarsystem`. The first instance of each container gets
+suffixed with a `_1`. (We didn't bring up any more than one of each.)
 
-We also automatically created a network (`solarsystem_default`) for all the
+Compose automatically created a network (`solarsystem_default`) for all the
 containers started with this `docker-compose.yaml` file. Other containers cannot
-reach inside this network without being explicitly granted permission or by
+reach into this network without being explicitly granted permission or by
 going through ports that are exposed to the host (`80` for Nginx and `8080` for
 Mongo Express in our case). Along with that, Compose handles name resolution so
 within the network the containers can use the service names as DNS names (e.g.,
@@ -117,15 +119,15 @@ Compose started (e.g., `docker ps`, `docker logs`).
 
 ```console
 $ docker ps
-CONTAINER ID        IMAGE                  COMMAND                  CREATED              STATUS              PORTS                    NAMES
-51ecad7e2a58        mongoexpress:latest    "tini -- /docker-ent…"   About a minute ago   Up About a minute   0.0.0.0:8080->8081/tcp   solarsystem_mongoexpress_1
-4d11d34a3a31        mongo:latest           "docker-entrypoint.s…"   About a minute ago   Up About a minute   27017/tcp                solarsystem_mongo_1
-e4eb5962d57f        solarsystem_php        "docker-php-entrypoi…"   About a minute ago   Up About a minute   9000/tcp                 solarsystem_php_1
-7e3c14deb10d        nginx:latest           "/docker-entrypoint.…"   About a minute ago   Up About a minute   0.0.0.0:80->80/tcp       solarsystem_nginx_1
+CONTAINER ID        IMAGE                  COMMAND                  CREATED             STATUS              PORTS                    NAMES
+2f6255135a47        mongo-express:latest   "tini -- /docker-ent…"   15 seconds ago      Up 13 seconds       0.0.0.0:8080->8081/tcp   solarsystem_mongoexpress_1
+5094c91245b8        nginx:latest           "/docker-entrypoint.…"   16 seconds ago      Up 14 seconds       0.0.0.0:80->80/tcp       solarsystem_nginx_1
+a59dc33045cf        solarsystem_php        "docker-php-entrypoi…"   16 seconds ago      Up 14 seconds       9000/tcp                 solarsystem_php_1
+4f1c86a66ea1        mongo:latest           "docker-entrypoint.s…"   16 seconds ago      Up 14 seconds       27017/tcp                solarsystem_mongo_1
 ```
 
 Open your browser and point to the new web site with <http://localhost/> (or the
-IP address of your host, <http://44.55.66.77/>).
+IP address of your host, <http://555.666.777.888/>).
 
 ![Planets in the Solar System](dynamic-planets.png?raw=true "Dynamic PHP page")
 
@@ -205,25 +207,25 @@ base images (first few layers) are common across the images, and each of the
 browser images share even more.
 
 ```console
-$ cd selenium
+$ cd selenium/
 $ docker-compose up -d
 Creating network "selenium_default" with the default driver
 ...
-Starting selenium_hub_1 ... done
-Starting selenium_chrome85_1  ... done
-Starting selenium_firefox81_1 ... done
-Starting selenium_firefox80_1 ... done
-Starting selenium_chrome86_1  ... done
+Creating selenium_hub_1 ... done
+Creating selenium_chrome86_1  ... done
+Creating selenium_chrome85_1  ... done
+Creating selenium_firefox81_1 ... done
+Creating selenium_firefox80_1 ... done
 ```
 
 Notice that the network (`selenium_default`) is a different network than the web
-application (in `solarsystem_default`) which means that containers can not talk
-directly to containers in the other network except where the port was exposed to
+application (`solarsystem_default`) which means that Selenium containers can not
+talk directly to the other containers df -except where the port was exposed to
 the host.
 
 You can see the Selenium Grid nodes by logging into the Selenium Hub console at
 <http://localhost:4444/grid/console/> (or the IP address of your host,
-<http://44.55.66.77:4444/grid/console/>).
+<http://555.666.777.888:4444/grid/console/>).
 
 ![Selenium Grid Console](selenium-grid-console.png?raw=true "Selenium Grid Console")
 
@@ -254,7 +256,7 @@ that address (so it can't be `localhost`). We also need to specify that we want
 to run on the `selenium_default` network so our tests can reach the Hub.
 
 ```console
-$ docker run -it --rm --network selenium_default --volume ${PWD}:/usr/src/maven --volume ${HOME}/.m2:/root/.m2 --workdir /usr/src/maven maven:3.6.3-jdk-11 mvn verify -DtargetUrl=http://44.55.66.77/
+$ docker run -it --rm --network selenium_default --volume ${PWD}:/usr/src/maven --volume ${HOME}/.m2:/root/.m2 --workdir /usr/src/maven maven:3.6.3-jdk-11 mvn verify -DtargetUrl=http://555.666.777.888/
 [INFO] Scanning for projects...
 [INFO]
 [INFO] ---------------------< com.steampunk:solarsystem >----------------------
@@ -266,17 +268,17 @@ $ docker run -it --rm --network selenium_default --volume ${PWD}:/usr/src/maven 
 [INFO] -------------------------------------------------------
 [INFO]  T E S T S
 [INFO] -------------------------------------------------------
-Nov 13, 2020 8:19:40 PM java.util.prefs.FileSystemPreferences$1 run
+Nov 21, 2020 12:12:16 AM java.util.prefs.FileSystemPreferences$1 run
 INFO: Created user preferences directory.
 [INFO] Running com.steampunk.solarsystem.PlanetsIT
 ...
-20:19:41.396 [ForkJoinPool-1-worker-13] DEBUG io.github.bonigarcia.seljup.WebDriverCreator - Creating WebDriver for FIREFOX at http://hub:4444/wd/hub with Capabilities {browserName: firefox, version: 80.0}
-20:19:41.395 [ForkJoinPool-1-worker-7] DEBUG io.github.bonigarcia.seljup.WebDriverCreator - Creating WebDriver for FIREFOX at http://hub:4444/wd/hub with Capabilities {browserName: firefox, version: 81.0.1}
-20:19:41.395 [ForkJoinPool-1-worker-5] DEBUG io.github.bonigarcia.seljup.WebDriverCreator - Creating WebDriver for CHROME at http://hub:4444/wd/hub with Capabilities {browserName: chrome, version: 85.0.4183.83}
-20:19:41.395 [ForkJoinPool-1-worker-9] DEBUG io.github.bonigarcia.seljup.WebDriverCreator - Creating WebDriver for CHROME at http://hub:4444/wd/hub with Capabilities {browserName: chrome, version: 86.0.4240.75}
+00:12:17.593 [ForkJoinPool-1-worker-3] DEBUG io.github.bonigarcia.seljup.WebDriverCreator - Creating WebDriver for FIREFOX at http://hub:4444/wd/hub with Capabilities {browserName: firefox, version: 80.0}
+00:12:17.594 [ForkJoinPool-1-worker-1] DEBUG io.github.bonigarcia.seljup.WebDriverCreator - Creating WebDriver for CHROME at http://hub:4444/wd/hub with Capabilities {browserName: chrome, version: 85.0.4183.83}
+00:12:22.322 [ForkJoinPool-1-worker-1] DEBUG io.github.bonigarcia.seljup.WebDriverCreator - Creating WebDriver for FIREFOX at http://hub:4444/wd/hub with Capabilities {browserName: firefox, version: 81.0.1}
+00:12:27.031 [ForkJoinPool-1-worker-3] DEBUG io.github.bonigarcia.seljup.WebDriverCreator - Creating WebDriver for CHROME at http://hub:4444/wd/hub with Capabilities {browserName: chrome, version: 86.0.4240.75}
 ...
-[ERROR] Tests run: 4, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 4.961 s <<< FAILURE! - in com.steampunk.solarsystem.PlanetsIT
-[ERROR] plutoIsPlanet{RemoteWebDriver}  Time elapsed: 4.92 s  <<< FAILURE!
+[ERROR] Tests run: 4, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 16.3 s <<< FAILURE! - in com.steampunk.solarsystem.PlanetsIT
+[ERROR] plutoIsPlanet{RemoteWebDriver}  Time elapsed: 5.72 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: Pluto is a Planet ==> expected: <true> but was: <false>
         at com.steampunk.solarsystem.PlanetsIT.plutoIsPlanet(PlanetsIT.java:64)
 
@@ -293,8 +295,8 @@ org.opentest4j.AssertionFailedError: Pluto is a Planet ==> expected: <true> but 
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD FAILURE
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  21.420 s
-[INFO] Finished at: 2020-11-13T20:19:46Z
+[INFO] Total time:  55.963 s
+[INFO] Finished at: 2020-11-21T00:12:33Z
 [INFO] ------------------------------------------------------------------------
 ...
 ```
@@ -317,11 +319,11 @@ configuration of the Maven Failsafe Plugin in the
 
 We can add Pluto as a planet by adding some data to the MongoDB. You can explore
 the MongoDB database via Mongo Express at <http://localhost:8080/> (or use the
-IP address of your host, <http://44.55.66.77:8080/>).
+IP address of your host, <http://555.666.777.888:8080/>).
 
 Visit <http://localhost:8080/db/solarsystemdb/planets> to see the `planets`
 collection in the `solarsystemdb` database (or use the IP address of your host,
-<http://44.55.66.77:8080/db/solarsystemdb/planets>) and select `New Document`.
+<http://555.666.777.888:8080/db/solarsystemdb/planets>) and select `New Document`.
 Reinstate Pluto as a planet by replacing the contents of the pop-up window with
 the following JSON and selecting `Save`.
 
@@ -339,6 +341,25 @@ Reload the Planets web page in your browser.
 "Updated data from MongoDB")
 
 Now you can rerun the Selenium tests and see them pass.
+
+```console
+$ docker run -it --rm --network selenium_default --volume ${PWD}:/usr/src/maven --volume ${HOME}/.m2:/root/.m2 --workdir /usr/src/maven maven:3.6.3-jdk-11 mvn verify -DtargetUrl=http://555.666.777.888/
+...
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 14.509 s - in com.steampunk.solarsystem.PlanetsIT
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
+[INFO]
+[INFO]
+[INFO] --- maven-failsafe-plugin:2.22.2:verify (default) @ solarsystem ---
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  22.993 s
+[INFO] Finished at: 2020-11-21T00:16:27Z
+[INFO] ------------------------------------------------------------------------
+```
 
 ## Scaling using Docker Compose
 
@@ -376,12 +397,13 @@ a production system.
 
 ## Clean up
 
-Once you are all done, shut down each of the sets of boxes by running the
+Once you are all done, shut down each of the systems by running the
 [docker-compose stop](https://docs.docker.com/compose/reference/stop/) and
 [docker-compose rm](https://docs.docker.com/compose/reference/rm/) commands in
 the respective directories.
 
 ```console
+$ cd ../
 $ docker-compose stop
 Stopping solarsystem_mongoexpress_1 ... done
 Stopping solarsystem_mongo_1        ... done
@@ -402,7 +424,7 @@ directory will be recreated if you start the MongoDB container again.
 
 You'll have to run `docker-compose rm` in the `selenium` directory as well.
 Adding `--stop --force` will stop the containers and remove them without
-confirmation so you don't have to use two commands.
+asking for confirmation so you don't have to use two commands.
 
 ```console
 $ cd selenium/

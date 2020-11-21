@@ -19,17 +19,16 @@ to be in the `docker` group.
 If you want to use a fresh cloud image, set up an instance in AWS with a current
 Ubuntu AMI and then copy the [install-docker.sh](install-docker.sh) script to
 the system and run it as root (e.g., `sudo bash ./install-docker.sh`).
-A `t2.micro` (1 vCPU, 1 GiB RAM) or similar is probably sufficient for the
+On AWS, a `t2.micro` (1 vCPU, 1 GiB RAM) or similar is probably enough for the
 Docker lessons. The comments in the script explain the networking/security group
 requirements.
 
 To complete the Docker Compose lesson (Lesson 5), you'll need Docker Compose
-installed. The `install-docker.sh` script handles that. The cloud instance might
-need to be a `t3a.medium` (2 vCPU, 4 GiB RAM) instance to handle all the
-containers that run concurrently in that lesson.
+installed. The `install-docker.sh` script handles that. The cloud instance will
+need to be at least a `t3a.small` (2 vCPU, 2 GiB RAM) instance with 12 GiB of
+storage to handle all the images and containers that run in that lesson.
 
-Ensure that you are ready by invoking the `docker` command from the command
-line.
+Check that you are ready by running `docker` from the command line.
 
 ```console
 $ docker --version

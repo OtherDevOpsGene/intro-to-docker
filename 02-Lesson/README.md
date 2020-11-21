@@ -30,25 +30,29 @@ That `Dockerfile` explains to Docker how to build an image using code.
 * `RUN` is the command to run to build the image
 * `CMD` is the default command to run when the container is instantiated
 
-Notice that those commands match what we did in the last lesson very closely.
+Notice that those commands match what we did interactively in the last lesson.
 
 Now tell Docker to assemble the image and name it using
 [docker build](https://docs.docker.com/engine/reference/commandline/build/).
 
 ```console
 $ docker build --tag ggotimer/chuck-norris-2 .
-[+] Building 42.5s (6/6) FINISHED
- => [internal] load build definition from Dockerfile                                                               0.0s
- => => transferring dockerfile: 32B                                                                                0.0s
- => [internal] load .dockerignore                                                                                  0.0s
- => => transferring context: 2B                                                                                    0.0s
- => [internal] load metadata for docker.io/library/ubuntu:latest                                                   0.0s
- => CACHED [1/2] FROM docker.io/library/ubuntu:latest                                                              0.0s
- => [2/2] RUN apt-get update && apt-get install -y wget cowsay recode jshon                                               42.0s
- => exporting to image                                                                                             0.5s
- => => exporting layers                                                                                            0.5s
- => => writing image sha256:bb007f319afce46a7e761b0aaf24ad2830ca856d808b8131e79a95a46f6bbe57                       0.0s
- => => naming to docker.io/ggotimer/chuck-norris-2                                                                 0.0s
+Sending build context to Docker daemon  2.048kB
+Step 1/3 : FROM ubuntu:latest
+ ---> d70eaf7277ea
+Step 2/3 : RUN apt-get update && apt-get install -y wget cowsay recode jshon
+ ---> Running in 5e036f9e3982
+Get:1 http://security.ubuntu.com/ubuntu focal-security InRelease [107 kB]
+...
+done.
+Removing intermediate container 5e036f9e3982
+ ---> acbb2d2c5840
+Step 3/3 : CMD ["/bin/bash", "-c", "wget 'http://api.icndb.com/jokes/random?exclude=[explicit]' -qO- | jshon -e value -e joke -u | recode html | /usr/games/cowsay"]
+ ---> Running in e2cca4c89b39
+Removing intermediate container e2cca4c89b39
+ ---> e0480458d6dd
+Successfully built e0480458d6dd
+Successfully tagged ggotimer/chuck-norris-2:latest
  ```
 
 * `--tag ggotimer/chuck-norris-2` tells Docker to name the image
@@ -68,18 +72,17 @@ fetches the contents of a dynamic resource).
 
 ```console
 $ docker build --tag ggotimer/chuck-norris-2 .
-[+] Building 0.0s (6/6) FINISHED
- => [internal] load build definition from Dockerfile                                                               0.0s
- => => transferring dockerfile: 38B                                                                                0.0s
- => [internal] load .dockerignore                                                                                  0.0s
- => => transferring context: 2B                                                                                    0.0s
- => [internal] load metadata for docker.io/library/ubuntu:latest                                                   0.0s
- => [1/2] FROM docker.io/library/ubuntu:latest                                                                     0.0s
- => CACHED [2/2] RUN apt-get update && apt-get install -y wget cowsay recode jshon                                 0.0s
- => exporting to image                                                                                             0.0s
- => => exporting layers                                                                                            0.0s
- => => writing image sha256:bb007f319afce46a7e761b0aaf24ad2830ca856d808b8131e79a95a46f6bbe57                       0.0s
- => => naming to docker.io/ggotimer/chuck-norris-2                                                                 0.0s
+Sending build context to Docker daemon  2.048kB
+Step 1/3 : FROM ubuntu:latest
+ ---> d70eaf7277ea
+Step 2/3 : RUN apt-get update && apt-get install -y wget cowsay recode jshon
+ ---> Using cache
+ ---> acbb2d2c5840
+Step 3/3 : CMD ["/bin/bash", "-c", "wget 'http://api.icndb.com/jokes/random?exclude=[explicit]' -qO- | jshon -e value -e joke -u | recode html | /usr/games/cowsay"]
+ ---> Using cache
+ ---> e0480458d6dd
+Successfully built e0480458d6dd
+Successfully tagged ggotimer/chuck-norris-2:latest
 ```
 
 If you need it, there is a `--no-cache` option.
@@ -133,11 +136,11 @@ command.
 
 ```console
 $ docker images
-REPOSITORY                 TAG       IMAGE ID        CREATED           SIZE
-ggotimer/chuck-norris-2    latest    bb007f319afc    8 minutes ago     161MB
-ggotimer/chuck-norris-1    latest    d2aca64b08a4    23 minutes ago    161MB
-ubuntu                     latest    d70eaf7277ea    11 days ago       72.9MB
-hello-world                latest    bf756fb1ae65    10 months ago     13.3kB
+REPOSITORY                TAG                 IMAGE ID            CREATED             SIZE
+ggotimer/chuck-norris-2   latest              e0480458d6dd        3 minutes ago       161MB
+ggotimer/chuck-norris-1   latest              1821b7de33f0        10 minutes ago      161MB
+ubuntu                    latest              d70eaf7277ea        4 weeks ago         72.9MB
+hello-world               latest              bf756fb1ae65        10 months ago       13.3kB
 ```
 
 We can also look at the layers/commands that made up the image by using the
@@ -146,14 +149,14 @@ command.
 
 ```console
 $ docker history ggotimer/chuck-norris-2
-IMAGE           CREATED           CREATED BY                                      SIZE
-7a2c27edb3aa    17 minutes ago    CMD ["/bin/bash" "-c" "wget 'http://api.icnd…   0B
-<missing>       17 minutes ago    RUN /bin/sh -c apt-get update && apt-get install -y …   87.9MB
-<missing>       11 days ago       /bin/sh -c #(nop)  CMD ["/bin/bash"]            0B
-<missing>       11 days ago       /bin/sh -c mkdir -p /run/systemd && echo 'do…   7B
-<missing>       11 days ago       /bin/sh -c [ -z "$(apt-get indextargets)" ]     0B
-<missing>       11 days ago       /bin/sh -c set -xe   && echo '#!/bin/sh' > /…   811B
-<missing>       11 days ago       /bin/sh -c #(nop) ADD file:435d9776fdd3a1834…   72.9MB
+IMAGE               CREATED             CREATED BY                                      SIZE                COMMENT
+e0480458d6dd        4 minutes ago       /bin/sh -c #(nop)  CMD ["/bin/bash" "-c" "wg…   0B
+acbb2d2c5840        4 minutes ago       /bin/sh -c apt-get update && apt-get install…   88MB
+d70eaf7277ea        4 weeks ago         /bin/sh -c #(nop)  CMD ["/bin/bash"]            0B
+<missing>           4 weeks ago         /bin/sh -c mkdir -p /run/systemd && echo 'do…   7B
+<missing>           4 weeks ago         /bin/sh -c [ -z "$(apt-get indextargets)" ]     0B
+<missing>           4 weeks ago         /bin/sh -c set -xe   && echo '#!/bin/sh' > /…   811B
+<missing>           4 weeks ago         /bin/sh -c #(nop) ADD file:435d9776fdd3a1834…   72.9MB
 ```
 
 Each of the _images_ listed are a layer in the final product. Notice that the
