@@ -1,4 +1,4 @@
-FROM openjdk:11-jre-slim AS runtime
-COPY target/helloworld-1.0.jar /
+FROM eclipse-temurin:17-jre-alpine AS runtime
+COPY target/helloworld-2.0.jar /
 
-CMD ["java", "-cp", "/helloworld-1.0.jar", "com.steampunk.helloworld.HelloWorld"]
+CMD ["java", "-cp", "/helloworld-2.0.jar", "dev.otherdevopsgene.helloworld.HelloWorld"]
