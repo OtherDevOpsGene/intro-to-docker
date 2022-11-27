@@ -100,8 +100,9 @@ $ docker-compose up -d
 ...
  ⠿ mongoexpress Pulled                             17.2s
 ...
-[+] Running 5/5
+[+] Running 6/6
  ⠿ Network solarsystem_default           Created    0.8s
+ ⠿ Volume "solarsystem_mongodata"        Created    0.0s
  ⠿ Container solarsystem-mongo-1         Started    5.0s
  ⠿ Container solarsystem-php-1           Started    5.1s
  ⠿ Container solarsystem-nginx-1         Started    5.7s
@@ -279,7 +280,9 @@ that address (so it can't be `localhost`). We also need to specify that we want
 to run on the `selenium_default` network so our tests can reach the Hub.
 
 ```console
-$ docker run -it --rm --network selenium_default --volume ${PWD}:/usr/src/maven --volume ${HOME}/.m2:/root/.m2 --workdir /usr/src/maven maven:3.8.6-eclipse-temurin-17 mvn verify -DtargetUrl=http://555.666.777.888/
+$ docker run -it --rm --network selenium_default --volume ${PWD}:/usr/src/maven \
+    --volume ${HOME}/.m2:/root/.m2 --workdir /usr/src/maven \
+    maven:3.8.6-eclipse-temurin-17 mvn verify -DtargetUrl=http://555.666.777.888/
 [INFO] Scanning for projects...
 [INFO]
 [INFO] ---------------------< com.steampunk:solarsystem >----------------------
@@ -364,7 +367,9 @@ Reload the Planets web page in your browser.
 Now you can rerun the Selenium tests and see them pass.
 
 ```console
-$ docker run -it --rm --network selenium_default --volume ${PWD}:/usr/src/maven --volume ${HOME}/.m2:/root/.m2 --workdir /usr/src/maven maven:3.8.6-eclipse-temurin-17 mvn verify -DtargetUrl=http://555.666.777.888/
+$ docker run -it --rm --network selenium_default --volume ${PWD}:/usr/src/maven \
+    --volume ${HOME}/.m2:/root/.m2 --workdir /usr/src/maven \
+    maven:3.8.6-eclipse-temurin-17 mvn verify -DtargetUrl=http://555.666.777.888/
 ...
 [INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.58 s - in dev.otherdevopsgene.solarsystem.PlanetsIT
 [INFO]
@@ -407,15 +412,15 @@ Likewise, you could scale back the needs later with another run:
 ```console
 $ docker-compose up -d --scale firefox=1 --scale chrome=1
 [+] Running 4/4
- ⠿ Container selenium-hub        Running    0.0s
- ⠿ Container selenium-edge-1     Running    0.0s
- ⠿ Container selenium-firefox-1  Started    7.1s
- ⠿ Container selenium-chrome-2   Started    7.1s
+ ⠿ Container selenium-hub        Running   0.0s
+ ⠿ Container selenium-edge-1     Running   0.0s
+ ⠿ Container selenium-firefox-1  Started   7.1s
+ ⠿ Container selenium-chrome-2   Started   7.1s
 ```
 
-As mentioned earlier, we would probably use a container orchestration tool like
-[Kubernetes](https://kubernetes.io/) to handle this type of thing dynamically in
-a production system.
+As mentioned earlier, we would generally use a container orchestration tool like
+[Kubernetes](https://kubernetes.io/) to handle dynamically scaling in a
+production system. We'll look at that next.
 
 ## Clean up
 

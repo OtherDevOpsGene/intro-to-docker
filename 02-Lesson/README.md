@@ -12,7 +12,7 @@ Create an empty directory to work in. In that directory, create a file called
 
 ```console
 mkdir chuck-norris-2
-cd chuck-norris-2
+cd chuck-norris-2/
 nano Dockerfile
 ```
 

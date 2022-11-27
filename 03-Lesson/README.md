@@ -10,7 +10,7 @@ Create an empty directory to work in. In that directory, create a `Dockerfile`:
 ```console
 cd ..
 mkdir helloworld
-cd helloworld
+cd helloworld/
 nano Dockerfile
 ```
 
@@ -316,7 +316,7 @@ The first time we run this might take a few minutes to download the image and
 any Maven dependencies we didn't already have cached, but running it a second
 time goes much quicker.
 
-We can build the Docker image by creaing a [Dockerfile](helloworld-local/Dockerfile)
+We can build the Docker image by creating a [Dockerfile](helloworld-local/Dockerfile)
 that copies the `jar` file from our local directory, which looks almost
 identical to the tail of our previous `Dockerfile`.
 
@@ -369,5 +369,17 @@ $ docker run otherdevopsgene/helloworld:local
 I just changed this! The current time is 9:00:30 PM on November 26, 2022.
 ```
 
-We will use this technique again as we look into using more Docker Hub
-images in [Lesson 4- Use Pre-Built Images](../04-Lesson/README.md).
+If it still says `Hello, world!` then the earlier JAR file was cached. You'll
+have to rebuild, this time with the `--no-cache` option to make sure it pulls
+the latest binary we built.
+
+```console
+$ docker build --no-cache --tag otherdevopsgene/helloworld:local .
+...
+$ docker run otherdevopsgene/helloworld:local
+I just changed this! The current time is 9:02:13 PM on November 26, 2022.
+```
+
+We will use this technique of local building and packaging the results again as
+we look into using more Docker Hub images in [Lesson 4- Use Pre-Built
+Images](../04-Lesson/README.md).
