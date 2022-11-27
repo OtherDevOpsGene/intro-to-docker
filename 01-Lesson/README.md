@@ -34,8 +34,8 @@ Instantiate your first Docker container with the
 $ docker run hello-world
 Unable to find image 'hello-world:latest' locally
 latest: Pulling from library/hello-world
-0e03bdcc26d7: Pull complete
-Digest: sha256:e7c70bb24b462baa86c102610182e3efcb12a04854e8c582838d92970a09f323
+2db29710123e: Pull complete
+Digest: sha256:faa03e786c97f07ef34423fccceeec2398ec8a5759259f94d99078f264e9d7af
 Status: Downloaded newer image for hello-world:latest
 
 Hello from Docker!
@@ -81,12 +81,10 @@ Run another container interactively.
 $ docker run -it ubuntu /bin/bash
 Unable to find image 'ubuntu:latest' locally
 latest: Pulling from library/ubuntu
-6a5697faee43: Pull complete
-ba13d3bc422b: Pull complete
-a254829d9e55: Pull complete
-Digest: sha256:fff16eea1a8ae92867721d90c59a75652ea66d29c05294e6e2f898704bdb8cf1
+e96e057aae67: Already exists
+Digest: sha256:4b1d0c4a2d2aaf63b37111f34eb9fa89fa1bf53dd6e4ca954d47caebca4005c2
 Status: Downloaded newer image for ubuntu:latest
-root@b000cd0e03d5:/#
+root@8c0767c0de83:/#
 ```
 
 You are left in a shell (`/bin/bash`) as `root` on the container, and the
@@ -101,16 +99,20 @@ At the root prompt, exit and then start another container with the same
 command. Then update Ubuntu's software index and install some packages.
 
 ```console
-root@b000cd0e03d5:/# exit
+root@8c0767c0de83:/# exit
 exit
 $ docker run -it ubuntu /bin/bash
-root@0e41b62958cc:/# apt-get update
+root@f0a3c974e524:/# apt-get update
 ...
 Reading package lists... Done
-root@0e41b62958cc:/# apt-get install -y wget cowsay recode jshon
+root@f0a3c974e524:/# apt-get install -y wget cowsay recode jshon
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
 ...
 done.
-root@0e41b62958cc:/#
+root@f0a3c974e524:/#
 ```
 
 __Leave this container running at the root prompt.__
@@ -127,8 +129,8 @@ command.
 
 ```console
 $ docker ps
-CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
-0e41b62958cc        ubuntu              "/bin/bash"         3 minutes ago       Up 3 minutes                            clever_wright
+CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS         PORTS     NAMES
+f0a3c974e524   ubuntu    "/bin/bash"   2 minutes ago   Up 2 minutes             happy_agnesi
 ```
 
 `docker ps` shows our running container. You could also run with `-a` (short for
@@ -136,14 +138,14 @@ CONTAINER ID        IMAGE               COMMAND             CREATED             
 
 ```console
 $ docker ps -a
-CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                     PORTS               NAMES
-0e41b62958cc        ubuntu              "/bin/bash"         3 minutes ago       Up 3 minutes                                   clever_wright
-b000cd0e03d5        ubuntu              "/bin/bash"         5 minutes ago       Exited (0) 3 minutes ago                       gracious_curie
-f0dbe294ef5a        hello-world         "/hello"            5 minutes ago       Exited (0) 5 minutes ago                       musing_chaum
+CONTAINER ID   IMAGE         COMMAND       CREATED         STATUS                     PORTS     NAMES
+f0a3c974e524   ubuntu        "/bin/bash"   2 minutes ago   Up 2 minutes                         happy_agnesi
+8c0767c0de83   ubuntu        "/bin/bash"   3 minutes ago   Exited (0) 3 minutes ago             nervous_swanson
+9ebf98a22736   hello-world   "/hello"      3 minutes ago   Exited (0) 3 minutes ago             recursing_chebyshev
 ```
 
-You can see our current container (`0e41b62958cc`), the first Ubuntu container we
-exited (`b000cd0e03d5`), and Hello World (`f0dbe294ef5a`), although your IDs
+You can see our current container (`f0a3c974e524`), the first Ubuntu container we
+exited (`8c0767c0de83`), and Hello World (`9ebf98a22736`), although your IDs
 will be different.
 
 Each container has a `Container ID` and a `Name`. If you don't assign a name
@@ -158,43 +160,45 @@ command. Then stop the first container (from the same, second window) using the
 command.
 
 ```console
-$ docker commit 0e41b62958cc ggotimer/chuck-norris-1
-sha256:1821b7de33f04fb70bc6fc60ce69921f31542ac538b5b1333f9c3c511081ecc5
-$ docker stop clever_wright
-clever_wright
+$ docker commit f0a3c974e524 otherdevopsgene/chuck-norris-1
+sha256:9c10ea95bec018c02ea18b9bc60da3377043bcd5bb884fc10fe981f02c58fc21
+$ docker stop happy_agnesi
+happy_agnesi
 ```
 
-You could have used the `Container ID` (`0e41b62958cc`) or the `Name`
-(`clever_wright`) in either command. I just showed an example of using each.
+You could have used the `Container ID` (`f0a3c974e524`) or the `Name`
+(`happy_agnesi`) in either command. I just showed an example of using each.
 
 Images are named with a single word (e.g., `hello-world`, `ubuntu`) if they are
 official Docker images. Otherwise they are named with your Docker Hub username
-(if you have one, mine is `ggotimer`), slash, an identifier (`chuck-norris-1` in
-this case), colon, and then a tag (`latest` if you don't specify). Unless you
-plan to push to Docker Hub it doesn't matter, but get in the habit of naming
-them with the correct convention.
+(if you have one, mine is `otherdevopsgene`), slash, an identifier
+(`chuck-norris-1` in this case), colon, and then a tag (`latest` if you don't
+specify). Unless you plan to push to Docker Hub it doesn't matter, but get in
+the habit of naming them with the correct convention.
 
 Notice that the container in the first window has stopped
-(we didn't type `exit` ourselves).
+(we didn't type `exit`).
 
 ```console
-root@0e41b62958cc:/# exit
+root@f0a3c974e524:/#
+$
 ```
 
-Check out the logs for the first container with the
+Check out the logs for the container with the
 [docker log](https://docs.docker.com/engine/reference/commandline/logs/)
 command. You'll see a replay of all the input and output from that container,
 even after the container is stopped.
 
 ```console
-$ docker logs clever_wright
-root@0e41b62958cc:/# apt-get update
+$ docker logs happy_agnesi
+root@f0a3c974e524:/# apt-get update
 ...
 Reading package lists... Done
-root@0e41b62958cc:/# apt-get install -y wget cowsay recode jshon
+root@f0a3c974e524:/# apt-get install -y wget cowsay recode jshon
+Reading package lists... Done
 ...
 done.
-root@0e41b62958cc:/# exit
+root@f0a3c974e524:/#
 ```
 
 ## Run the Container
@@ -202,14 +206,14 @@ root@0e41b62958cc:/# exit
 Let's look at the results of your interactive labor by starting your new image.
 
 ```console
-$ docker run ggotimer/chuck-norris-1 wget 'http://api.icndb.com/jokes/random?exclude=[explicit]' -qO-
-{ "type": "success", "value": { "id": 549, "joke": "Chuck Norris killed two stones with one bird.", "categories": [] } }
+$ docker run otherdevopsgene/chuck-norris-1 wget 'http://api.chucknorris.io/jokes/random' -qO-
+{"categories":[],"created_at":"2020-01-05 13:42:21.795084","icon_url":"https://assets.chucknorris.host/img/avatar/chuck-norris.png","id":"UtbmnEoIT7qN881XnLjaMA","updated_at":"2020-01-05 13:42:21.795084","url":"https://api.chucknorris.io/jokes/UtbmnEoIT7qN881XnLjaMA","value":"Chuck Norris cuts a knife in two pieces, with a chunk of bread"}
 ```
 
 Or you can try an even more unwieldy command.
 
 ```console
-$ docker run ggotimer/chuck-norris-1 /bin/bash -c "wget 'http://api.icndb.com/jokes/random?exclude=[explicit]' -qO- | jshon -e value -e joke -u | recode html | /usr/games/cowsay"
+$ docker run otherdevopsgene/chuck-norris-1 /bin/bash -c "wget 'http://api.chucknorris.io/jokes/random' -qO- | jshon -e value -u | recode html | /usr/games/cowsay"
  _____________________________________
 / Chuck Norris always knows the EXACT \
 \ location of Carmen SanDiego.        /

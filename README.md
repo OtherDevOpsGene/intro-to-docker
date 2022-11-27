@@ -1,7 +1,5 @@
 # Introduction to Docker
 
-![Logo](https://github.com/SteampunkFoundry/images/raw/master/steampunk_banner-white_pink_on_grey.jfif)
-
 A hands-on introduction to using Docker. By the end of the workshop you should
 be able to run Docker containers, build Docker images interactively, and use a
 `Dockerfile` to create a Docker image with code.
@@ -32,12 +30,12 @@ Check that you are ready by running `docker` from the command line.
 
 ```console
 $ docker --version
-Docker version 19.03.13, build 4484c46d9d
+Docker version 20.10.20, build 9fdeb9c
 ```
 
 The exact version and build number are not critical to this workshop.
 
-If the command works and you get a response similar to below, you are ready to
+If the command works and you get a response similar to above, you are ready to
 proceed with [Lesson 1- Our First Containers](01-Lesson/README.md).
 
 Good luck!

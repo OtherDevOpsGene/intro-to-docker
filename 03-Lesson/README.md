@@ -19,14 +19,14 @@ Add the [following contents](helloworld/Dockerfile):
 ```Dockerfile
 FROM ubuntu:latest
 RUN apt-get update && apt-get install -y --no-install-recommends \
-  default-jdk-headless \
+  openjdk-17-jdk-headless \
   git \
   maven \
   && rm -rf /var/lib/apt-get/lists/*
-RUN git clone https://github.com/SteampunkFoundry/helloworld.git
+RUN git clone https://github.com/OtherDevOpsGene/helloworld.git
 WORKDIR /helloworld
 RUN mvn clean package
-CMD ["java", "-cp", "/helloworld/target/helloworld-1.0.jar", "com.steampunk.helloworld.HelloWorld"]
+CMD ["java", "-cp", "/helloworld/target/helloworld-2.0.jar", "dev.otherdevopsgene.helloworld.HelloWorld"]
 ```
 
 This `Dockerfile` has a few new features.
@@ -40,43 +40,24 @@ This `Dockerfile` has a few new features.
 Build it with `docker build` as before.
 
 ```console
-$ docker build --tag ggotimer/helloworld .
-Sending build context to Docker daemon  2.048kB
-Step 1/6 : FROM ubuntu:latest
- ---> d70eaf7277ea
-Step 2/6 : RUN apt-get update && apt-get install -y --no-install-recommends   default-jdk-headless   git   maven   && rm -rf /var/lib/apt-get/lists/*
- ---> Running in a89289834043
-...
-done.
-Removing intermediate container a89289834043
- ---> 88a954361d66
-Step 3/6 : RUN git clone https://github.com/SteampunkFoundry/helloworld.git
- ---> Running in cf61e08e1f34
-Cloning into 'helloworld'...
-Removing intermediate container cf61e08e1f34
- ---> a6dffa1eef21
-Step 4/6 : WORKDIR /helloworld
- ---> Running in 3fbe7ac48c5f
-Removing intermediate container 3fbe7ac48c5f
- ---> 87a7912d9283
-Step 5/6 : RUN mvn clean package
- ---> Running in 5140e08fb480
-...
-[INFO] Building jar: /helloworld/target/helloworld-1.0.jar
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESS
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time:  15.187 s
-[INFO] Finished at: 2020-11-20T22:49:19Z
-[INFO] ------------------------------------------------------------------------
-Removing intermediate container 5140e08fb480
- ---> c5eb4e3064ae
-Step 6/6 : CMD ["java", "-cp", "/helloworld/target/helloworld-1.0.jar", "com.steampunk.helloworld.HelloWorld"]
- ---> Running in 957793eb60f6
-Removing intermediate container 957793eb60f6
- ---> 96456981b783
-Successfully built 96456981b783
-Successfully tagged ggotimer/helloworld:latest
+$ docker build --tag otherdevopsgene/helloworld .
+[+] Building 194.6s (9/9) FINISHED
+ => [internal] load build definition from Dockerfile                                                                                                        0.0s
+ => => transferring dockerfile: 436B                                                                                                                        0.0s
+ => [internal] load .dockerignore                                                                                                                           0.0s
+ => => transferring context: 2B                                                                                                                             0.0s
+ => [internal] load metadata for docker.io/library/ubuntu:latest                                                                                            0.0s
+ => CACHED [1/5] FROM docker.io/library/ubuntu:latest                                                                                                       0.0s
+ => [2/5] RUN apt-get update && apt-get install -y --no-install-recommends   openjdk-17-jdk-headless   git   maven   && rm -rf /var/lib/apt-get/lists/*   178.3s
+ => [3/5] RUN git clone https://github.com/OtherDevOpsGene/helloworld.git                                                                                   0.7s
+ => [4/5] WORKDIR /helloworld                                                                                                                               0.0s
+ => [5/5] RUN mvn clean package                                                                                                                            10.8s
+ => exporting to image                                                                                                                                      4.7s
+ => => exporting layers                                                                                                                                     4.7s
+ => => writing image sha256:230b174db9f728d6bf94708f84f0ed170a5ab0ad11241cb34bc81b8595bfa12e                                                                0.0s
+ => => naming to docker.io/otherdevopsgene/helloworld                                                                                                       0.0s
+
+Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
  ```
 
 Despite being a Hello World program, there is quite a bit we have to install for
@@ -87,8 +68,8 @@ might take a while.
 Use `docker run` to create a container:
 
 ```console
-$ docker run ggotimer/helloworld
-Hello, World! The current time is 10:52:53 PM on November 20, 2020.
+$ docker run otherdevopsgene/helloworld
+Hello, world! The current time is 8:29:00 PM on November 26, 2022.
 ```
 
 Let's tag this version of the image with
@@ -96,11 +77,11 @@ Let's tag this version of the image with
 can compare it later to an improved version.
 
 ```console
-$ docker tag ggotimer/helloworld ggotimer/helloworld:big
-$ docker images ggotimer/helloworld
-REPOSITORY            TAG                 IMAGE ID            CREATED             SIZE
-ggotimer/helloworld   big                 96456981b783        4 minutes ago       666MB
-ggotimer/helloworld   latest              96456981b783        4 minutes ago       666MB
+$ docker tag otherdevopsgene/helloworld otherdevopsgene/helloworld:big
+$ docker images otherdevopsgene/helloworld
+REPOSITORY                   TAG       IMAGE ID       CREATED         SIZE
+otherdevopsgene/helloworld   big       230b174db9f7   3 minutes ago   835MB
+otherdevopsgene/helloworld   latest    230b174db9f7   3 minutes ago   835MB
 ```
 
 ## Use a Multi-Stage Build
@@ -110,117 +91,116 @@ Edit the `Dockerfile` to make [a few changes](helloworld-sm/Dockerfile):
 ```Dockerfile
 FROM ubuntu:latest AS development
 RUN apt-get update && apt-get install -y --no-install-recommends \
-  default-jdk-headless \
+  openjdk-17-jdk-headless \
   git \
   maven \
   && rm -rf /var/lib/apt-get/lists/*
-RUN git clone https://github.com/SteampunkFoundry/helloworld.git
+RUN git clone https://github.com/OtherDevOpsGene/helloworld.git
 WORKDIR /helloworld
 RUN mvn clean package
 
-FROM openjdk:11-jre-slim AS runtime
-COPY --from=development /helloworld/target/helloworld-1.0.jar /
+FROM eclipse-temurin:17-jre-alpine AS runtime
+COPY --from=development /helloworld/target/helloworld-2.0.jar /
 
-CMD ["java", "-cp", "/helloworld-1.0.jar", "com.steampunk.helloworld.HelloWorld"]
+CMD ["java", "-cp", "/helloworld-2.0.jar", "dev.otherdevopsgene.helloworld.HelloWorld"]
 ```
 
 We are using a [multi-stage build](https://docs.docker.com/develop/develop-images/multistage-build/#use-multi-stage-builds)
-by including multple `FROM` statements.
+by including multiple `FROM` statements.
 
 * `AS development` names the first stage. Without naming, we'd refer to the
   first stage by number which could change if additional stages were added later.
-* `FROM openjdk:11-jre-slim AS runtime` pulls a new Docker image down for the
-  second stage and uses that for the new base image.
+* `FROM eclipse-temurin:17-jre-alpine AS runtime` pulls a new Docker image down
+  for the second stage and uses that for the new base image.
 * `COPY --from=development` takes a file from the first stage, `development`,
   and puts it in place on the second stage, `runtime`.
-* The `helloworld-1.0.jar` file is now at the root where we copied it, so the
+* The `helloworld-2.0.jar` file is now at the root where we copied it, so the
   `CMD` has to change slightly.
 
 Build it with `docker build` and tag it as `small` to make it easy to identify.
 
 ```console
-$ docker build --tag ggotimer/helloworld .
-docker build --tag ggotimer/helloworld .
-Sending build context to Docker daemon  2.048kB
-Step 1/8 : FROM ubuntu:latest AS development
- ---> d70eaf7277ea
-Step 2/8 : RUN apt-get update && apt-get install -y --no-install-recommends   default-jdk-headless   git   maven   && rm -rf /var/lib/apt-get/lists/*
- ---> Using cache
- ---> 88a954361d66
-Step 3/8 : RUN git clone https://github.com/SteampunkFoundry/helloworld.git
- ---> Using cache
- ---> a6dffa1eef21
-Step 4/8 : WORKDIR /helloworld
- ---> Using cache
- ---> 87a7912d9283
-Step 5/8 : RUN mvn clean package
- ---> Using cache
- ---> c5eb4e3064ae
-Step 6/8 : FROM openjdk:11-jre-slim AS runtime
-11-jre-slim: Pulling from library/openjdk
-852e50cd189d: Pull complete
-ef17c1a94464: Pull complete
-477589359411: Pull complete
-e4e48f47ca5c: Pull complete
-Digest: sha256:dff4e41cba98a2d186e8d1505f2762c4701e0e935c62c7ecf3d6ae8fd0bb7410
-Status: Downloaded newer image for openjdk:11-jre-slim
- ---> e93b583389ea
-Step 7/8 : COPY --from=development /helloworld/target/helloworld-1.0.jar /
- ---> e03aca8ba500
-Step 8/8 : CMD ["java", "-cp", "/helloworld-1.0.jar", "com.steampunk.helloworld.HelloWorld"]
- ---> Running in f355fed50bce
-Removing intermediate container f355fed50bce
- ---> 6d6395379d44
-Successfully built 6d6395379d44
-Successfully tagged ggotimer/helloworld:latest
-$ docker run ggotimer/helloworld
-Hello, World! The current time is 10:56:37 PM on November 20, 2020.
-$ docker tag ggotimer/helloworld ggotimer/helloworld:small
-$ docker images ggotimer/helloworld
-REPOSITORY            TAG                 IMAGE ID            CREATED             SIZE
-ggotimer/helloworld   latest              6d6395379d44        58 seconds ago      205MB
-ggotimer/helloworld   small               6d6395379d44        58 seconds ago      205MB
-ggotimer/helloworld   big                 96456981b783        7 minutes ago       666MB
+$ docker build --tag otherdevopsgene/helloworld .
+[+] Building 11.8s (13/13) FINISHED
+ => [internal] load build definition from Dockerfile                                                                                                                         0.0s
+ => => transferring dockerfile: 549B                                                                                                                                         0.0s
+ => [internal] load .dockerignore                                                                                                                                            0.0s
+ => => transferring context: 2B                                                                                                                                              0.0s
+ => [internal] load metadata for docker.io/library/eclipse-temurin:17-jre-alpine                                                                                             1.4s
+ => [internal] load metadata for docker.io/library/ubuntu:latest                                                                                                             0.0s
+ => [auth] library/eclipse-temurin:pull token for registry-1.docker.io                                                                                                       0.0s
+ => [development 1/5] FROM docker.io/library/ubuntu:latest                                                                                                                   0.0s
+ => [runtime 1/2] FROM docker.io/library/eclipse-temurin:17-jre-alpine@sha256:ddcde24217dc1a9df56c7dd206ee1f4dc89f6988c9364968cd02c6cbeb21b1de                               9.8s
+ => => resolve docker.io/library/eclipse-temurin:17-jre-alpine@sha256:ddcde24217dc1a9df56c7dd206ee1f4dc89f6988c9364968cd02c6cbeb21b1de                                       0.0s
+ => => sha256:ddcde24217dc1a9df56c7dd206ee1f4dc89f6988c9364968cd02c6cbeb21b1de 320B / 320B                                                                                   0.0s
+ => => sha256:02c04793fa49ad5cd193c961403223755f9209a67894622e05438598b32f210e 1.16kB / 1.16kB                                                                               0.0s
+ => => sha256:69102b04b07a7f946622c05530d171f25e1bfa30bbd30e40d7a1281f3c22ca66 4.21kB / 4.21kB                                                                               0.0s
+ => => sha256:ca7dd9ec2225f2385955c43b2379305acd51543c28cf1d4e94522b3d94cce3ce 2.81MB / 2.81MB                                                                               0.5s
+ => => sha256:bb9822f87bb1185b1d8f81aa09fc8a20796bb3db4c90da28c6177e0fd8a3d8d3 12.03MB / 12.03MB                                                                             2.5s
+ => => sha256:cccd68747c044ae776975ffdd998e22ee5d43c9c686cba9a87bcd26069037ceb 46.68MB / 46.68MB                                                                             8.4s
+ => => extracting sha256:ca7dd9ec2225f2385955c43b2379305acd51543c28cf1d4e94522b3d94cce3ce                                                                                    0.1s
+ => => sha256:ee54dffbd02b36a76a80493a29d4a464993cd3dd5dc73b5ab1c47b03648609c1 161B / 161B                                                                                   0.6s
+ => => extracting sha256:bb9822f87bb1185b1d8f81aa09fc8a20796bb3db4c90da28c6177e0fd8a3d8d3                                                                                    0.3s
+ => => extracting sha256:cccd68747c044ae776975ffdd998e22ee5d43c9c686cba9a87bcd26069037ceb                                                                                    1.2s
+ => => extracting sha256:ee54dffbd02b36a76a80493a29d4a464993cd3dd5dc73b5ab1c47b03648609c1                                                                                    0.0s
+ => CACHED [development 2/5] RUN apt-get update && apt-get install -y --no-install-recommends   openjdk-17-jdk-headless   git   maven   && rm -rf /var/lib/apt-get/lists/*   0.0s
+ => CACHED [development 3/5] RUN git clone https://github.com/OtherDevOpsGene/helloworld.git                                                                                 0.0s
+ => CACHED [development 4/5] WORKDIR /helloworld                                                                                                                             0.0s
+ => CACHED [development 5/5] RUN mvn clean package                                                                                                                           0.0s
+ => [runtime 2/2] COPY --from=development /helloworld/target/helloworld-2.0.jar /                                                                                            0.4s
+ => exporting to image                                                                                                                                                       0.0s
+ => => exporting layers                                                                                                                                                      0.0s
+ => => writing image sha256:b3f1c4bfb86a118dec189c50d8a79d56ebcb56df250e943257bf7ddfab95e4da                                                                                 0.0s
+ => => naming to docker.io/otherdevopsgene/helloworld                                                                                                                        0.0s
+
+Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
+
+$ docker run otherdevopsgene/helloworld
+Hello, world! The current time is 8:33:50 PM on November 26, 2022.
+$ docker tag otherdevopsgene/helloworld otherdevopsgene/helloworld:small
+$ docker images otherdevopsgene/helloworld
+REPOSITORY                   TAG       IMAGE ID       CREATED         SIZE
+otherdevopsgene/helloworld   latest    b3f1c4bfb86a   2 minutes ago   168MB
+otherdevopsgene/helloworld   small     b3f1c4bfb86a   2 minutes ago   168MB
+otherdevopsgene/helloworld   big       230b174db9f7   7 minutes ago   835MB
 ```
 
 Notice the size difference. The `small` version we just built doesn't have the
 JDK installed, just the JRE. Maven and Git aren't installed, nor are the
 artifacts and libraries they used during compilation (we left them all on the
-first stage image).
+first stage image). Plus we are using a smaller Linux distribution.
 
 The size differences are really highlighted when you look at the layers.
 
 ```console
-$ docker history ggotimer/helloworld:big
-IMAGE               CREATED             CREATED BY                                      SIZE                COMMENT
-96456981b783        8 minutes ago       /bin/sh -c #(nop)  CMD ["java" "-cp" "/hello…   0B
-c5eb4e3064ae        8 minutes ago       /bin/sh -c mvn clean package                    9.27MB
-87a7912d9283        8 minutes ago       /bin/sh -c #(nop) WORKDIR /helloworld           0B
-a6dffa1eef21        8 minutes ago       /bin/sh -c git clone https://github.com/Stea…   53.4kB
-88a954361d66        8 minutes ago       /bin/sh -c apt-get update && apt-get install…   584MB
-d70eaf7277ea        4 weeks ago         /bin/sh -c #(nop)  CMD ["/bin/bash"]            0B
-<missing>           4 weeks ago         /bin/sh -c mkdir -p /run/systemd && echo 'do…   7B
-<missing>           4 weeks ago         /bin/sh -c [ -z "$(apt-get indextargets)" ]     0B
-<missing>           4 weeks ago         /bin/sh -c set -xe   && echo '#!/bin/sh' > /…   811B
-<missing>           4 weeks ago         /bin/sh -c #(nop) ADD file:435d9776fdd3a1834…   72.9MB
-$ docker history ggotimer/helloworld:small
-IMAGE               CREATED              CREATED BY                                      SIZE                COMMENT
-6d6395379d44        About a minute ago   /bin/sh -c #(nop)  CMD ["java" "-cp" "/hello…   0B
-e03aca8ba500        About a minute ago   /bin/sh -c #(nop) COPY file:a0a19f274056a12d…   3.17kB
-e93b583389ea        2 days ago           /bin/sh -c set -eux;   arch="$(dpkg --print-…   127MB
-<missing>           2 days ago           /bin/sh -c #(nop)  ENV JAVA_VERSION=11.0.9.1    0B
-<missing>           2 days ago           /bin/sh -c { echo '#/bin/sh'; echo 'echo "$J…   27B
-<missing>           2 days ago           /bin/sh -c #(nop)  ENV PATH=/usr/local/openj…   0B
-<missing>           2 days ago           /bin/sh -c #(nop)  ENV JAVA_HOME=/usr/local/…   0B
-<missing>           2 days ago           /bin/sh -c #(nop)  ENV LANG=C.UTF-8             0B
-<missing>           2 days ago           /bin/sh -c set -eux;  apt-get update;  apt-g…   8.78MB
-<missing>           3 days ago           /bin/sh -c #(nop)  CMD ["bash"]                 0B
-<missing>           3 days ago           /bin/sh -c #(nop) ADD file:d2abb0e4e7ac17737…   69.2MB
+$ docker history otherdevopsgene/helloworld:big
+IMAGE          CREATED          CREATED BY                                      SIZE      COMMENT
+230b174db9f7   9 minutes ago    CMD ["java" "-cp" "/helloworld/target/hellow…   0B        buildkit.dockerfile.v0
+<missing>      9 minutes ago    RUN /bin/sh -c mvn clean package # buildkit     6.6MB     buildkit.dockerfile.v0
+<missing>      10 minutes ago   WORKDIR /helloworld                             0B        buildkit.dockerfile.v0
+<missing>      10 minutes ago   RUN /bin/sh -c git clone https://github.com/…   57kB      buildkit.dockerfile.v0
+<missing>      10 minutes ago   RUN /bin/sh -c apt-get update && apt-get ins…   751MB     buildkit.dockerfile.v0
+<missing>      3 weeks ago      /bin/sh -c #(nop)  CMD ["bash"]                 0B
+<missing>      3 weeks ago      /bin/sh -c #(nop) ADD file:29c72d5be8c977aca…   77.8MB
+$ docker history otherdevopsgene/helloworld:small
+IMAGE          CREATED         CREATED BY                                      SIZE      COMMENT
+b3f1c4bfb86a   4 minutes ago   CMD ["java" "-cp" "/helloworld-2.0.jar" "dev…   0B        buildkit.dockerfile.v0
+<missing>      4 minutes ago   COPY /helloworld/target/helloworld-2.0.jar /…   3.2kB     buildkit.dockerfile.v0
+<missing>      2 weeks ago     /bin/sh -c echo Verifying install ...     &&…   0B
+<missing>      2 weeks ago     /bin/sh -c set -eux;     ARCH="$(apk --print…   139MB
+<missing>      2 weeks ago     /bin/sh -c #(nop)  ENV JAVA_VERSION=jdk-17.0…   0B
+<missing>      2 weeks ago     /bin/sh -c apk add --no-cache fontconfig lib…   23.4MB
+<missing>      2 weeks ago     /bin/sh -c #(nop)  ENV LANG=en_US.UTF-8 LANG…   0B
+<missing>      2 weeks ago     /bin/sh -c #(nop)  ENV PATH=/opt/java/openjd…   0B
+<missing>      2 weeks ago     /bin/sh -c #(nop)  ENV JAVA_HOME=/opt/java/o…   0B
+<missing>      2 weeks ago     /bin/sh -c #(nop)  CMD ["/bin/sh"]              0B
+<missing>      2 weeks ago     /bin/sh -c #(nop) ADD file:ceeb6e8632fafc657…   5.54MB
 ```
 
-The bottom layer is similar in size, but the `small` variant only needed 127MB
-for the JRE versus 584MB for the JDK, Maven, and Git. Plus the Maven build was
-9.27MB whereas the `jar` file is only 3.17kB by itself.
+The `small` variant only needed 139MB
+for the JRE versus 751MB for the JDK, Maven, and Git. Plus the Maven build was
+6.6MB whereas the `jar` file is only 3.2kB by itself. And the base image change
+dropped the size from 77.8MB to 5.54MB.
 
 Using multi-stage builds and more targeted, smaller base images to shrink Docker
 images to as small as feasible is a common theme in Docker. There is more
@@ -235,39 +215,38 @@ possibly supplying your personal access token, and then
 [docker push](https://docs.docker.com/engine/reference/commandline/push/).
 
 ```console
-$ docker login --username ggotimer
+$ docker login --username otherdevopsgene
 Password:
-WARNING! Your password will be stored unencrypted in /home/ubuntu/.docker/config.json.
-Configure a credential helper to remove this warning. See
-https://docs.docker.com/engine/reference/commandline/login/#credentials-store
-
 Login Succeeded
-$ docker push ggotimer/helloworld
-The push refers to repository [docker.io/ggotimer/helloworld]
-9890ccb4e710: Pushed
-7591bcdc97cc: Pushed
-f0c150e387d6: Pushed
-cc9d18e90faa: Layer already exists
-0c2689e3f920: Layer already exists
-47dde53750b4: Layer already exists
-big: digest: sha256:6cabd12e1761b7a30fe40fb2e99b2a516ef6e3887e419f8516dcd7c8015f47db size: 1576
-4d2ea8fb0bd3: Pushed
-48e4c6ac2d89: Mounted from library/openjdk
-8f9c014c2c2b: Mounted from library/openjdk
-4ee298b79cde: Mounted from library/openjdk
-f5600c6330da: Mounted from library/openjdk
-latest: digest: sha256:45041645a2f11e8cdadc573a8f1845a6934ed6288d01992f60cd31eee026382a size: 1367
-4d2ea8fb0bd3: Layer already exists
-48e4c6ac2d89: Layer already exists
-8f9c014c2c2b: Layer already exists
-4ee298b79cde: Layer already exists
-f5600c6330da: Layer already exists
-small: digest: sha256:45041645a2f11e8cdadc573a8f1845a6934ed6288d01992f60cd31eee026382a size: 1367
+
+Logging in with your password grants your terminal complete access to your account.
+For better security, log in with a limited-privilege personal access token. Learn more at https://docs.docker.com/go/access-tokens/
+
+$ docker push --all-tags otherdevopsgene/helloworld
+The push refers to repository [docker.io/otherdevopsgene/helloworld]
+8a67107efcbd: Pushed
+5f70bf18a086: Pushed
+da1b34861796: Pushed
+488ee75e0e35: Pushed
+f4a670ac65b6: Mounted from library/ubuntu
+big: digest: sha256:bfb80d3b448bb1de141513605d393193ffa8b55e22a150ed2606d1ec93bf5672 size: 1368
+eaa6a37404b5: Layer already exists
+572287eaacc3: Layer already exists
+5272f9838d37: Layer already exists
+ad6087c6688c: Layer already exists
+e5e13b0c77cb: Layer already exists
+latest: digest: sha256:03c135d532f2b6f307e086faca98ce53512462c6032a3985de671fc2efad899c size: 1367
+eaa6a37404b5: Layer already exists
+572287eaacc3: Layer already exists
+5272f9838d37: Layer already exists
+ad6087c6688c: Layer already exists
+e5e13b0c77cb: Layer already exists
+small: digest: sha256:03c135d532f2b6f307e086faca98ce53512462c6032a3985de671fc2efad899c size: 1367
 ```
 
-You'll see that Docker pushes all the versions of `ggotimer/helloworld` were
-pushed and any layers that Docker Hub already knew about were cached. You can
-see the resulting [ggotimer/helloworld](https://hub.docker.com/repository/docker/ggotimer/helloworld)
+You'll see that Docker pushes all the versions of `otherdevopsgene/helloworld`
+and any layers that Docker Hub already knew about were cached. You can
+see the resulting [otherdevopsgene/helloworld](https://hub.docker.com/repository/docker/otherdevopsgene/helloworld)
 repository for me on Docker Hub.
 
 ## Build a Better Workspace
@@ -288,13 +267,14 @@ Checkout the source code from GitHub and switch into that directory, just as the
 `Dockerfile` did.
 
 ```console
-$ git clone https://github.com/SteampunkFoundry/helloworld.git
+$ git clone https://github.com/otherdevopsgene/helloworld.git
 Cloning into 'helloworld'...
-remote: Enumerating objects: 16, done.
-remote: Counting objects: 100% (16/16), done.
-remote: Compressing objects: 100% (8/8), done.
-remote: Total 16 (delta 0), reused 12 (delta 0), pack-reused 0
-Receiving objects: 100% (16/16), 6.98 KiB | 6.98 MiB/s, done.
+remote: Enumerating objects: 39, done.
+remote: Counting objects: 100% (39/39), done.
+remote: Compressing objects: 100% (17/17), done.
+remote: Total 39 (delta 8), reused 33 (delta 7), pack-reused 0
+Receiving objects: 100% (39/39), 13.39 KiB | 1.67 MiB/s, done.
+Resolving deltas: 100% (8/8), done.
 $ cd helloworld/
 ```
 
@@ -305,16 +285,16 @@ directory as `/usr/src/maven`. Also, Maven caches it's dependencies in
 `/root/.m2` on the container.
 
 ```console
-$ docker run -it --rm --volume ${PWD}:/usr/src/maven --volume ${HOME}/.m2:/root/.m2 --workdir /usr/src/maven maven:3.6.3-jdk-11 mvn clean package
-Unable to find image 'maven:3.6.3-jdk-11' locally
-3.6.3-jdk-11: Pulling from library/maven
+$ docker run -it --rm --volume ${PWD}:/usr/src/maven --volume ${HOME}/.m2:/root/.m2 --workdir /usr/src/maven maven:3.8.6-eclipse-temurin-17 mvn clean package
+Unable to find image 'maven:3.8.6-eclipse-temurin-17' locally
+3.8.6-eclipse-temurin-17: Pulling from library/maven
 ...
-[INFO] Building jar: /usr/src/maven/target/helloworld-1.0.jar
+[INFO] Building jar: /usr/src/maven/target/helloworld-2.0.jar
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  18.028 s
-[INFO] Finished at: 2020-11-20T23:06:04Z
+[INFO] Total time:  1.573 s
+[INFO] Finished at: 2022-11-26T20:53:36Z
 [INFO] ------------------------------------------------------------------------
 ```
 
@@ -325,10 +305,10 @@ Unable to find image 'maven:3.6.3-jdk-11' locally
   on the container
 * `--workdir /usr/src/maven` changes directories on the container, just as
   `WORKDIR` does in the `Dockerfile`
-* `maven:3.6.3-jdk-11` is the [Maven image](https://hub.docker.com/_/maven) to
-  use from Docker Hub, and we have specified a particular Maven version
-  (`3.6.3`) and a particular JDK to use (`11`) by choosing the appropriately
-  tagged image name
+* `maven:3.8.6-eclipse-temurin-17` is the [Maven
+  image](https://hub.docker.com/_/maven) to use from Docker Hub, and we have
+  specified a particular Maven version (`3.8.6`) and a particular JDK to use
+  (`Eclipse Temurin 17`) by choosing the appropriately tagged image name
 * `mvn clean package` is the Maven command to run
 
 The first time we run this might take a few minutes to download the image and
@@ -340,10 +320,10 @@ that copies the `jar` file from our local directory, which looks almost
 identical to the tail of our previous `Dockerfile`.
 
 ```Dockerfile
-FROM openjdk:11-jre-slim AS runtime
-COPY target/helloworld-1.0.jar /
+FROM eclipse-temurin:17-jre-alpine AS runtime
+COPY target/helloworld-2.0.jar /
 
-CMD ["java", "-cp", "/helloworld-1.0.jar", "com.steampunk.helloworld.HelloWorld"]
+CMD ["java", "-cp", "/helloworld-2.0.jar", "dev.otherdevopsgene.helloworld.HelloWorld"]
 ```
 
 * `COPY` works from our local filesystem as well as from earlier stage images
@@ -351,33 +331,40 @@ CMD ["java", "-cp", "/helloworld-1.0.jar", "com.steampunk.helloworld.HelloWorld"
 Build it with `docker build`, tagging it as `local`, and then run it.
 
 ```console
-$ docker build --tag ggotimer/helloworld:local .
-Sending build context to Docker daemon  156.2kB
-Step 1/3 : FROM openjdk:11-jre-slim AS runtime
- ---> e93b583389ea
-Step 2/3 : COPY target/helloworld-1.0.jar /
- ---> 69613fd3df99
-Step 3/3 : CMD ["java", "-cp", "/helloworld-1.0.jar", "com.steampunk.helloworld.HelloWorld"]
- ---> Running in 7c825bcabfb0
-Removing intermediate container 7c825bcabfb0
- ---> 679cae9ba80c
-Successfully built 679cae9ba80c
-Successfully tagged ggotimer/helloworld:local
-$ docker run ggotimer/helloworld:local
-Hello, World! The current time is 11:09:29 PM on November 20, 2020.
+$ docker build --tag otherdevopsgene/helloworld:local .
+[+] Building 1.1s (8/8) FINISHED
+ => [internal] load build definition from Dockerfile                                                                                            0.0s
+ => => transferring dockerfile: 235B                                                                                                            0.0s
+ => [internal] load .dockerignore                                                                                                               0.0s
+ => => transferring context: 2B                                                                                                                 0.0s
+ => [internal] load metadata for docker.io/library/eclipse-temurin:17-jre-alpine                                                                0.9s
+ => [auth] library/eclipse-temurin:pull token for registry-1.docker.io                                                                          0.0s
+ => [internal] load build context                                                                                                               0.0s
+ => => transferring context: 3.29kB                                                                                                             0.0s
+ => CACHED [1/2] FROM docker.io/library/eclipse-temurin:17-jre-alpine@sha256:ddcde24217dc1a9df56c7dd206ee1f4dc89f6988c9364968cd02c6cbeb21b1de   0.0s
+ => [2/2] COPY target/helloworld-2.0.jar /                                                                                                      0.0s
+ => exporting to image                                                                                                                          0.0s
+ => => exporting layers                                                                                                                         0.0s
+ => => writing image sha256:ebd78a24c0dad737f04e0898bb255e3ccad75438b6ec50431c28f834fed33f39                                                    0.0s
+ => => naming to docker.io/otherdevopsgene/helloworld:local                                                                                     0.0s
+
+Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
+
+$ docker run otherdevopsgene/helloworld:local
+Hello, world! The current time is 8:58:25 PM on November 26, 2022.
 ```
 
-Feel free to change the source code in `src/main/java/com/steampunk/helloworld/HelloWorld.java`
+Feel free to change the source code in `src/main/java/dev/otherdevopsgene/helloworld/HelloWorld.java`
 and recompile, rebuild, and rerun to see that the changes are being reflected.
 
 ```console
-$ nano src/main/java/com/steampunk/helloworld/HelloWorld.java
-$ docker run -it --rm --volume ${PWD}:/usr/src/maven --volume ${HOME}/.m2:/root/.m2 --workdir /usr/src/maven maven:3.6.3-jdk-11 mvn clean package
+$ nano src/main/java/dev/otherdevopsgene/helloworld/HelloWorld.java
+$ docker run -it --rm --volume ${PWD}:/usr/src/maven --volume ${HOME}/.m2:/root/.m2 --workdir /usr/src/maven maven:3.8.6-eclipse-temurin-17 mvn clean package
 ...
-$ docker build --tag ggotimer/helloworld:local .
+$ docker build --tag otherdevopsgene/helloworld:local .
 ...
-$ docker run ggotimer/helloworld:local
-I just changed this! The current time is 11:11:07 PM on November 20, 2020.
+$ docker run otherdevopsgene/helloworld:local
+I just changed this! The current time is 9:00:30 PM on November 26, 2022.
 ```
 
 We will use this technique again as we look into using more Docker Hub
