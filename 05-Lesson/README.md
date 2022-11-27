@@ -47,7 +47,7 @@ services:
     image: mongo-express:latest
     depends_on:
       - mongo
-    restart: on-failure
+    restart: unless-stopped
     ports:
       - "8080:8081"
 
@@ -76,10 +76,11 @@ Most of the directives match the Docker arguments, but there are a few new ones:
 * `depends_on` tells Compose to wait to start a container until the container it
   depends on is started (but that doesn't necessarily mean the application
   running on the container will be ready).
-* `restart` tells Compose what to do if the container exits. In happen to know
-  that `mongoexpress` will exit with a failure if it cannot connect to `mongo`
-  which will happen if it comes up before `mongo` is ready. So we'll have it
-  restart on failure to try connecting to `mongo` again.
+* `restart` tells Compose what to do if the container exits. In this case,
+  `mongoexpress` will exit if it cannot connect to `mongo`. It waits for `mongo`
+  to be running, but not necessarily ready to accept connections. So we'll have
+  it try connecting to `mongo` again and again unless we explicitly tell it to
+  stop.
 
 In the `php` service, we specify a directory to `build` rather than an `image`
 to start. The `build` executes on the [Dockerfile](https://github.com/OtherDevOpsGene/solarsystem/blob/main/php/Dockerfile)

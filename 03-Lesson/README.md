@@ -285,7 +285,8 @@ directory as `/usr/src/maven`. Also, Maven caches it's dependencies in
 `/root/.m2` on the container.
 
 ```console
-$ docker run -it --rm --volume ${PWD}:/usr/src/maven --volume ${HOME}/.m2:/root/.m2 --workdir /usr/src/maven maven:3.8.6-eclipse-temurin-17 mvn clean package
+$ docker run -it --rm --volume ${PWD}:/usr/src/maven --volume ${HOME}/.m2:/root/.m2 \
+    --workdir /usr/src/maven maven:3.8.6-eclipse-temurin-17 mvn clean package
 Unable to find image 'maven:3.8.6-eclipse-temurin-17' locally
 3.8.6-eclipse-temurin-17: Pulling from library/maven
 ...
@@ -359,7 +360,8 @@ and recompile, rebuild, and rerun to see that the changes are being reflected.
 
 ```console
 $ nano src/main/java/dev/otherdevopsgene/helloworld/HelloWorld.java
-$ docker run -it --rm --volume ${PWD}:/usr/src/maven --volume ${HOME}/.m2:/root/.m2 --workdir /usr/src/maven maven:3.8.6-eclipse-temurin-17 mvn clean package
+$ docker run -it --rm --volume ${PWD}:/usr/src/maven --volume ${HOME}/.m2:/root/.m2 \
+    --workdir /usr/src/maven maven:3.8.6-eclipse-temurin-17 mvn clean package
 ...
 $ docker build --tag otherdevopsgene/helloworld:local .
 ...

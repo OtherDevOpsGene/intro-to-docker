@@ -109,7 +109,8 @@ command line. Although we could if we wanted to make some changes, since that
 was just a default.
 
 ```console
-$ docker run otherdevopsgene/chuck-norris-2 /bin/bash -c "wget 'http://api.chucknorris.io/jokes/random' -qO- | jshon -e value -u | recode html | /usr/games/cowsay -f tux"
+$ docker run otherdevopsgene/chuck-norris-2 /bin/bash -c "wget 'http://api.chucknorris.io/jokes/random' -qO- |\
+    jshon -e value -u | recode html | /usr/games/cowsay -f tux"
  _____________________________________
 / Chuck Norris hosting is 101% uptime \
 \ guaranteed.                         /

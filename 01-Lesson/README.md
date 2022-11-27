@@ -207,13 +207,18 @@ Let's look at the results of your interactive labor by starting your new image.
 
 ```console
 $ docker run otherdevopsgene/chuck-norris-1 wget 'http://api.chucknorris.io/jokes/random' -qO-
-{"categories":[],"created_at":"2020-01-05 13:42:21.795084","icon_url":"https://assets.chucknorris.host/img/avatar/chuck-norris.png","id":"UtbmnEoIT7qN881XnLjaMA","updated_at":"2020-01-05 13:42:21.795084","url":"https://api.chucknorris.io/jokes/UtbmnEoIT7qN881XnLjaMA","value":"Chuck Norris cuts a knife in two pieces, with a chunk of bread"}
+{"categories":[],"created_at":"2020-01-05 13:42:21.795084",
+"icon_url":"https://assets.chucknorris.host/img/avatar/chuck-norris.png",
+"id":"UtbmnEoIT7qN881XnLjaMA","updated_at":"2020-01-05 13:42:21.795084",
+"url":"https://api.chucknorris.io/jokes/UtbmnEoIT7qN881XnLjaMA",
+"value":"Chuck Norris cuts a knife in two pieces, with a chunk of bread"}
 ```
 
 Or you can try an even more unwieldy command.
 
 ```console
-$ docker run otherdevopsgene/chuck-norris-1 /bin/bash -c "wget 'http://api.chucknorris.io/jokes/random' -qO- | jshon -e value -u | recode html | /usr/games/cowsay"
+$ docker run otherdevopsgene/chuck-norris-1 /bin/bash -c "wget 'http://api.chucknorris.io/jokes/random' -qO- |\
+    jshon -e value -u | recode html | /usr/games/cowsay"
  _____________________________________
 / Chuck Norris always knows the EXACT \
 \ location of Carmen SanDiego.        /

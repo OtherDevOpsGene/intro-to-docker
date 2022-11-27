@@ -90,7 +90,9 @@ reuse the container name.
 
 ```console
 $ docker run --name www -d -p 8080:80 nginx
-docker: Error response from daemon: Conflict. The container name "/www" is already in use by container "4ba640e08f960f69f4a31150e5a69824b4a94e793d21d5d2ffb615049c739842". You have to remove (or rename) that container to be able to reuse that name.
+docker: Error response from daemon: Conflict. The container name "/www" is already in use
+by container "4ba640e08f960f69f4a31150e5a69824b4a94e793d21d5d2ffb615049c739842".
+You have to remove (or rename) that container to be able to reuse that name.
 See 'docker run --help'.
 $ docker rm www
 www
