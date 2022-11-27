@@ -18,7 +18,7 @@ with the metadata about how it should be assembled. Containers are read-only
 copies of those images with a thin read-write layer on top for the ephemeral
 instance data. We'll see more about this later.
 
-![Ubuntu layers](ubuntu-layers.png?raw=true "Layers in Docker containers")
+![Ubuntu layers](./ubuntu-layers.svg "Layers in Docker containers")
 
 Because of this, containers can be used as immutable infrastructure. The images
 can be cloned and spun up and restarted and destroyed as needed, knowing that a

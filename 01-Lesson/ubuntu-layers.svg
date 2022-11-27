@@ -1,0 +1,110 @@
+<svg width="1280" height="720" xmlns="http://www.w3.org/2000/svg"
+xmlns:xlink="http://www.w3.org/1999/xlink" overflow="hidden"><defs><clipPath
+id="clip0"><rect x="0" y="0" width="1280" height="720"/></clipPath></defs><g
+clip-path="url(#clip0)"><rect x="0" y="0" width="1280" height="720"
+fill="#FFFFFF"/><rect x="376.5" y="31.5001" width="667" height="658"
+stroke="#2F528F" stroke-width="1.33333" stroke-miterlimit="8"
+fill="#EFF2F5"/><rect x="402.5" y="165.5" width="615" height="495"
+stroke="#2F528F" stroke-width="0.666667" stroke-miterlimit="8"
+stroke-dasharray="2.66667 2" fill="#050505"/><rect x="427.5" y="470.5"
+width="537" height="74" stroke="#000000" stroke-width="0.666667"
+stroke-linejoin="round" stroke-miterlimit="10" fill="#F9F9F9"/><text
+font-family="Consolas,Consolas_MSFontService,sans-serif" font-weight="400"
+font-size="21" transform="translate(436.267 514)">RUN set</text><text
+font-family="Consolas,Consolas_MSFontService,sans-serif" font-weight="400"
+font-size="21" transform="translate(529.6 514)">-</text><text
+font-family="Consolas,Consolas_MSFontService,sans-serif" font-weight="400"
+font-size="21" transform="translate(541.267 514)">xe</text><text
+font-family="Consolas,Consolas_MSFontService,sans-serif" font-weight="400"
+font-size="21" transform="translate(576.267 514)">&amp;&amp; echo
+'#!/bin/</text><text font-family="Consolas,Consolas_MSFontService,sans-serif"
+font-weight="400" font-size="21" transform="translate(762.933
+514)">sh</text><text font-family="Consolas,Consolas_MSFontService,sans-serif"
+font-weight="400" font-size="21" transform="translate(786.267 514)">' &gt;
+…</text><text font-family="Consolas,Consolas_MSFontService,sans-serif"
+font-weight="400" font-size="21" transform="translate(881.267
+514)">811B</text><rect x="427.5" y="564.5" width="537" height="74"
+stroke="#000000" stroke-width="0.666667" stroke-linejoin="round"
+stroke-miterlimit="10" fill="#F9F9F9"/><text
+font-family="Consolas,Consolas_MSFontService,sans-serif" font-weight="400"
+font-size="21" transform="translate(436.267 608)">ADD
+file:435d9776fdd3a183…</text><text
+font-family="Consolas,Consolas_MSFontService,sans-serif" font-weight="400"
+font-size="21" transform="translate(881.267 608)">72.9MB</text><rect x="427.5"
+y="375.5" width="537" height="74" stroke="#000000" stroke-width="0.666667"
+stroke-linejoin="round" stroke-miterlimit="10" fill="#F9F9F9"/><text
+font-family="Consolas,Consolas_MSFontService,sans-serif" font-weight="400"
+font-size="21" transform="translate(436.267 419)">RUN [</text><text
+font-family="Consolas,Consolas_MSFontService,sans-serif" font-weight="400"
+font-size="21" transform="translate(506.267 419)">-</text><text
+font-family="Consolas,Consolas_MSFontService,sans-serif" font-weight="400"
+font-size="21" transform="translate(517.933 419)">z "$(apt</text><text
+font-family="Consolas,Consolas_MSFontService,sans-serif" font-weight="400"
+font-size="21" transform="translate(611.267 419)">-</text><text
+font-family="Consolas,Consolas_MSFontService,sans-serif" font-weight="400"
+font-size="21" transform="translate(622.933 419)">get</text><text
+font-family="Consolas,Consolas_MSFontService,sans-serif" font-weight="400"
+font-size="21" transform="translate(669.6 419)">indextargets</text><text
+font-family="Consolas,Consolas_MSFontService,sans-serif" font-weight="400"
+font-size="21" transform="translate(809.6 419)">)" ]…</text><text
+font-family="Consolas,Consolas_MSFontService,sans-serif" font-weight="400"
+font-size="21" transform="translate(881.267 419)">0B</text><rect x="427.5"
+y="280.5" width="537" height="74" stroke="#000000" stroke-width="0.666667"
+stroke-linejoin="round" stroke-miterlimit="10" fill="#F9F9F9"/><text
+font-family="Consolas,Consolas_MSFontService,sans-serif" font-weight="400"
+font-size="21" transform="translate(436.267 324)">RUN</text><text
+font-family="Consolas,Consolas_MSFontService,sans-serif" font-weight="400"
+font-size="21" transform="translate(482.933 324)">mkdir</text><text
+font-family="Consolas,Consolas_MSFontService,sans-serif" font-weight="400"
+font-size="21" transform="translate(552.933 324)">-</text><text
+font-family="Consolas,Consolas_MSFontService,sans-serif" font-weight="400"
+font-size="21" transform="translate(564.6 324)">p /run/</text><text
+font-family="Consolas,Consolas_MSFontService,sans-serif" font-weight="400"
+font-size="21" transform="translate(646.267 324)">systemd</text><text
+font-family="Consolas,Consolas_MSFontService,sans-serif" font-weight="400"
+font-size="21" transform="translate(739.6 324)">&amp;&amp; echo ‘d…</text><text
+font-family="Consolas,Consolas_MSFontService,sans-serif" font-weight="400"
+font-size="21" transform="translate(881.267 324)">7B</text><rect x="427.5"
+y="185.5" width="537" height="74" stroke="#000000" stroke-width="0.666667"
+stroke-linejoin="round" stroke-miterlimit="10" fill="#F9F9F9"/><text
+font-family="Consolas,Consolas_MSFontService,sans-serif" font-weight="400"
+font-size="21" transform="translate(436.267 229)">CMD ["/bin/bash"]</text><text
+font-family="Consolas,Consolas_MSFontService,sans-serif" font-weight="400"
+font-size="21" transform="translate(881.267 229)">0B</text><rect x="493.5"
+y="89.5001" width="366" height="42" stroke="#000000" stroke-width="0.666667"
+stroke-linejoin="round" stroke-miterlimit="10" fill="#00CC33"/><text
+fill="#F9F9F9" font-family="Avenir Next LT Pro,Avenir Next LT
+Pro_MSFontService,sans-serif" font-weight="400" font-size="24"
+transform="translate(603.387 119)">instance data</text><text font-family="Avenir
+Next LT Pro,Avenir Next LT Pro_MSFontService,sans-serif" font-weight="400"
+font-size="24" transform="translate(897.286 90)">container</text><text
+font-family="Avenir Next LT Pro,Avenir Next LT Pro_MSFontService,sans-serif"
+font-weight="400" font-size="24" transform="translate(947.953
+119)">layer</text><text font-family="Avenir Next LT Pro,Avenir Next LT
+Pro_MSFontService,sans-serif" font-weight="400" font-size="24"
+transform="translate(875.026 147)">(read</text><text font-family="Avenir Next LT
+Pro,Avenir Next LT Pro_MSFontService,sans-serif" font-weight="400"
+font-size="24" transform="translate(932.12 147)">-</text><text
+font-family="Avenir Next LT Pro,Avenir Next LT Pro_MSFontService,sans-serif"
+font-weight="400" font-size="24" transform="translate(939.786
+147)">write)</text><text fill="#F9F9F9" font-family="Avenir Next LT Pro,Avenir
+Next LT Pro_MSFontService,sans-serif" font-weight="400" font-size="24"
+transform="matrix(-1.83697e-16 -1 1 -1.83697e-16 999.198 605)">immutable image
+layers (read</text><text fill="#F9F9F9" font-family="Avenir Next LT Pro,Avenir
+Next LT Pro_MSFontService,sans-serif" font-weight="400" font-size="24"
+transform="matrix(-1.83697e-16 -1 1 -1.83697e-16 999.198 280)">-</text><text
+fill="#F9F9F9" font-family="Avenir Next LT Pro,Avenir Next LT
+Pro_MSFontService,sans-serif" font-weight="400" font-size="24"
+transform="matrix(-1.83697e-16 -1 1 -1.83697e-16 999.198 272)">only)</text><path
+d="M0.333354 6.66667 0.333417 26.419-0.333249 26.419-0.333312 6.66667ZM-3.99997
+8.00001 0 0 4.00003 7.99999ZM4.00008 25.0857 0.000104987 33.0857-3.99992
+25.0857Z" fill="#0033FF" transform="matrix(1 0 0 -1 518.5 165.586)"/><path
+d="M0.333354 6.66667 0.333418 27.6564-0.333249 27.6564-0.333313
+6.66667ZM-3.99998 8.00001 0 0 4.00002 7.99999ZM4.00008 26.323 0.000104987
+34.323-3.99992 26.3231Z" fill="#0033FF" transform="matrix(1 0 0 -1 833.5
+164.823)"/><path d="M0.333354 6.66667 0.333418 27.6564-0.333249 27.6564-0.333313
+6.66667ZM-3.99998 8.00001 0 0 4.00002 7.99999ZM4.00008 26.323 0.000104987
+34.323-3.99992 26.3231Z" fill="#0033FF" transform="matrix(1 0 0 -1 676.5
+165.823)"/><text font-family="Avenir Next LT Pro,Avenir Next LT
+Pro_MSFontService,sans-serif" font-weight="700" font-size="24"
+transform="translate(574.115 75)">ubuntu:20.04 container</text></g></svg>
