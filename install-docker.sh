@@ -2,7 +2,7 @@
 
 # To set up an Ubuntu system like we need for this workshop,
 # copy this script the the target system:
-#    wget https://raw.githubusercontent.com/SteampunkFoundry/intro-to-docker/main/install-docker.sh
+#    wget https://raw.githubusercontent.com/OtherDevOpsGene/intro-to-docker/main/install-docker.sh
 # and run it as root:
 #    sudo bash ./install-docker.sh
 

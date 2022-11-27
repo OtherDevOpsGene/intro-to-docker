@@ -11,19 +11,65 @@ that will install the required software.
 ## Prerequisites
 
 To participate, you need to have a workstation with Docker installed and you
-need to have access to Docker. On a Linux system, this probably means you have
-to be in the `docker` group.
+need to have access to Docker.
 
-If you want to use a fresh cloud image, set up an instance in AWS with a current
-Ubuntu AMI and then copy the [install-docker.sh](install-docker.sh) script to
-the system and run it as root (e.g., `sudo bash ./install-docker.sh`).
-On AWS, a `t2.micro` (1 vCPU, 1 GiB RAM) or similar is probably enough for the
+### Windows
+
+On Windows, having Docker Desktop installed with the Windows Subsystem for Linux
+will suffice. Ubuntu is the preferred operating system.
+
+### AWS Cloud9
+
+In the cloud, using an AWS Cloud9 instance is the easiest environment to
+prepare. A default, free tier `t2.micro` (1 GiB RAM + 1 vCPU) instance with
+10GiB of storage will suffice for the first 4 lessons. You'll need at least a
+`t3.small` (2 GiB RAM + 2 vCPU) instance with 16GiB of storage for Lesson 5 to
+handle all the images and containers that run in that lesson.
+
+Once you start a Cloud9 instance and connect, follow the
+[Resize an Amazon EBS volume used by an
+environment](https://docs.aws.amazon.com/cloud9/latest/user-guide/move-environment.html#move-environment-resize)
+instructions to bump the storage to at least 16 GiB.
+
+Then, install the Compose utility from Docker.
+
+```console
+$ sudo curl -L "https://github.com/docker/compose/releases/download/v2.13.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100 43.5M  100 43.5M    0     0  85.2M      0 --:--:-- --:--:-- --:--:-- 85.2M
+$ sudo chmod +x /usr/local/bin/docker-compose
+$ docker-compose --version
+Docker Compose version v2.13.0
+```
+
+Finally, open TCP ports `80`, `8080`, and `4444` for external traffic. In the
+Cloud9 IDE, click on the circle with you first initial in the upper-right hand
+corner of the screen and choose `Manage EC2 Instance`.
+
+![Manage EC2 Instance](manage-ec2-instance.png?raw=true)
+
+Click on the instance ID (e.g., `i-006e1ded29b3af4c2`), then the `Security` tab,
+and then on the security groups link (e.g., `sg-02dca994b48a154a3`). Then, on
+the `Inbound rules` tab, select the `Edit inbound rules` button. Add a rule for
+each of the 3 ports (`80`, `8080`, `4444`) from `Anywhere- IPv4` and click `Save
+rules`.
+
+![Edit inbound rules](edit-inbound-rules.png?raw=true)
+
+### AWS EC2 Ubuntu
+
+If you want to use your own cloud image, set up an instance in AWS with a
+current Ubuntu AMI and then copy the [install-docker.sh](install-docker.sh)
+script to the system and run it as root (e.g., `sudo bash ./install-docker.sh`).
+On AWS, a `t2.micro` (1 GiB RAM + 1 vCPU) or similar is probably enough for the
 Docker lessons. The comments in the script explain the networking/security group
 requirements.
 
 To complete the Docker Compose lesson (Lesson 5), you'll need Docker Compose
 installed. The `install-docker.sh` script handles that. The cloud instance will
-need to be at least a `t3a.small` (2 vCPU, 2 GiB RAM) instance with 12 GiB of
+need to be at least a `t3a.small` (2 GiB RAM + 2 vCPU) instance with 16 GiB of
 storage to handle all the images and containers that run in that lesson.
 
 Check that you are ready by running `docker` from the command line.
