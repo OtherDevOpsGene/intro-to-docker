@@ -3,7 +3,8 @@
 Managing multiple containers at once can be handled through Docker Compose,
 which allows us to define services and their relationships with each other
 and the outside world. [Compose](https://docs.docker.com/compose/) is a
-separate tool from Docker.
+plugin to Docker, although it can also be installed as a standalone tool
+(`docker-compose` instead of `docker compose`).
 
 In a production environment, we would be much more likely to use a container
 orchestration tool like [Kubernetes](https://kubernetes.io/) to run the Docker
@@ -89,12 +90,12 @@ in the specified directory.
 The volumes to mount and ports to expose are generally listed on each image's
 page on Docker Hub.
 
-Start the cluster with the [docker-compose up](https://docs.docker.com/compose/reference/up/)
+Start the cluster with the [docker compose up](https://docs.docker.com/compose/reference/up/)
 command.
 
 ```console
 $ cd ~/solarsystem/
-$ docker-compose up -d
+$ docker compose up -d
 [+] Running 19/19
  ⠿ mongo Pulled                                    35.7s
 ...
@@ -217,14 +218,14 @@ seconds (`SE_SESSION_REQUEST_TIMEOUT`), trying to get a session every 10 seconds
 (`SE_SESSION_RETRY_INTERVAL`). As we've configured the grid,
 only one session can be active in each node at a time.
 
-Start the Selenium Grid cluster with `docker-compose up`. As the new images
+Start the Selenium Grid cluster with `docker compose up`. As the new images
 are pulled to your host, you'll see the common layers in the images at work. The
 base images (first few layers) are common across the images, and each of the
 browser images share even more.
 
 ```console
 $ cd selenium/
-$ docker-compose up -d
+$ docker compose up -d
 [+] Running 44/44
  ⠿ edge Pulled                             102.1s
 ...
@@ -248,8 +249,8 @@ talk directly to the other containers except where the port was exposed to
 the host.
 
 You can see the Selenium Grid nodes by logging into the Selenium Hub console at
-<http://localhost:4444/grid/console/> (or the IP address of your host,
-<http://555.666.777.888:4444/grid/console/>).
+<http://localhost:4444/> (or the IP address of your host,
+<http://555.666.777.888:4444/>).
 
 ![Selenium Grid Console](selenium-grid-console.png?raw=true "Selenium Grid Console")
 
@@ -391,11 +392,11 @@ $ docker run -it --rm --network selenium_default --volume ${PWD}:/usr/src/maven 
 
 Compose can create multiple instances of the services. If you wanted
 Selenium Grid to have two Firefox nodes and three Chrome
-nodes available for concurrent testing, you could rerun `docker-compose` with
+nodes available for concurrent testing, you could rerun `docker compose` with
 `--scale` arguments.
 
 ```console
-$ docker-compose up -d --scale firefox=2 --scale chrome=3
+$ docker compose up -d --scale firefox=2 --scale chrome=3
 [+] Running 7/7
  ⠿ Container selenium-hub        Running   0.0s
  ⠿ Container selenium-chrome-4   Started   7.8s
@@ -410,7 +411,7 @@ Note that you did not have to stop the containers to scale the service.
 Likewise, you could scale back the needs later with another run:
 
 ```console
-$ docker-compose up -d --scale firefox=1 --scale chrome=1
+$ docker compose up -d --scale firefox=1 --scale chrome=1
 [+] Running 4/4
  ⠿ Container selenium-hub        Running   0.0s
  ⠿ Container selenium-edge-1     Running   0.0s
@@ -425,19 +426,19 @@ production system. We'll look at that next.
 ## Clean up
 
 Once you are all done, shut down each of the systems by running the
-[docker-compose stop](https://docs.docker.com/compose/reference/stop/) and
-[docker-compose rm](https://docs.docker.com/compose/reference/rm/) commands in
+[docker compose stop](https://docs.docker.com/compose/reference/stop/) and
+[docker compose rm](https://docs.docker.com/compose/reference/rm/) commands in
 the respective directories.
 
 ```console
 $ cd ../
-$ docker-compose stop
+$ docker compose stop
 [+] Running 4/4
  ⠿ Container solarsystem-mongoexpress-1  Stopped   0.8s
  ⠿ Container solarsystem-php-1           Stopped   0.7s
  ⠿ Container solarsystem-nginx-1         Stopped   1.0s
  ⠿ Container solarsystem-mongo-1         Stopped   0.5s
-$ docker-compose rm
+$ docker compose rm
 ? Going to remove solarsystem-mongoexpress-1, solarsystem-mongo-1, solarsystem-php-1, solarsystem-nginx-1 Yes
 [+] Running 4/0
  ⠿ Container solarsystem-nginx-1         Removed   0.0s
@@ -455,13 +456,13 @@ $ docker volume rm solarsystem_mongodata
 solarsystem_mongodata
 ```
 
-You'll have to run `docker-compose rm` in the `selenium` directory as well.
+You'll have to run `docker compose rm` in the `selenium` directory as well.
 Adding `--stop --force` will stop the containers and remove them without
 asking for confirmation so you don't have to use two commands.
 
 ```console
 $ cd selenium/
-$ docker-compose rm --stop --force
+$ docker compose rm --stop --force
 [+] Running 4/4
  ⠿ Container selenium-firefox-1  Stopped    4.4s
  ⠿ Container selenium-edge-1     Stopped    4.5s

@@ -114,10 +114,9 @@ already had it cached.
 
 ## Create an Image
 
-In a second window (leaving the container running in the other), list the
-running containers with the
-[docker ps](https://docs.docker.com/engine/reference/commandline/ps/)
-command.
+In a second terminal window (leaving the container running in the other), list
+the running containers with the [docker
+ps](https://docs.docker.com/engine/reference/commandline/ps/) command.
 
 ```console
 $ docker ps

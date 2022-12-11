@@ -22,9 +22,11 @@ apt-get update
 # Install Docker Community Edition
 apt-get install -y docker-ce
 
-# Install Docker Compose (but not the Ubuntu package that requires an X11 display)
-curl -L "https://github.com/docker/compose/releases/download/v2.13.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-chmod +x /usr/local/bin/docker-compose
+# Install the Compose CLI plugin for Docker
+DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+mkdir -p ${DOCKER_CONFIG}/cli-plugins
+curl -fsSL https://github.com/docker/compose/releases/download/v2.14.0/docker-compose-linux-x86_64 -o ${DOCKER_CONFIG}/cli-plugins/docker-compose
+chmod +x ${DOCKER_CONFIG}/cli-plugins/docker-compose
 
 # Give the default ubuntu user permission to use Docker
 usermod -a -G docker ubuntu
