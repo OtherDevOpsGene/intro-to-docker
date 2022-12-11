@@ -35,13 +35,13 @@ Then, install the Compose CLI plugin for Docker.
 
 ```console
 $ DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
-$ mkdir -p $DOCKER_CONFIG/cli-plugins
-$ curl -SL https://github.com/docker/compose/releases/download/v2.14.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+$ mkdir -p ${DOCKER_CONFIG}/cli-plugins
+$ curl -SL https://github.com/docker/compose/releases/download/v2.14.0/docker-compose-linux-x86_64 -o ${DOCKER_CONFIG}/cli-plugins/docker-compose
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
 100 42.8M  100 42.8M    0     0  9600k      0  0:00:04  0:00:04 --:--:--  9.8M
-$ chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+$ chmod +x ${DOCKER_CONFIG}/cli-plugins/docker-compose
 $ docker compose version
 Docker Compose version v2.14.0
 ```
