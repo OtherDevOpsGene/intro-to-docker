@@ -108,6 +108,8 @@ and switch into the `solarsystem/nginx/docroot/` directory.
 
 ```console
 $ cd ~
+$ mkdir environment         # This will fail on Cloud9 because it already exists
+$ cd environment
 $ git clone https://github.com/OtherDevOpsGene/solarsystem.git
 Cloning into 'solarsystem'...
 remote: Enumerating objects: 109, done.
@@ -116,7 +118,7 @@ remote: Compressing objects: 100% (52/52), done.
 remote: Total 109 (delta 30), reused 96 (delta 24), pack-reused 0R
 Receiving objects: 100% (109/109), 26.57 KiB | 4.43 MiB/s, done.
 Resolving deltas: 100% (30/30), done.
-$ cd ~/solarsystem/nginx/docroot/
+$ cd ~/environment/solarsystem/nginx/docroot/
 ```
 
 Now run an Nginx container, mounting the current directory as

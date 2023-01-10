@@ -94,7 +94,7 @@ Start the cluster with the [docker compose up](https://docs.docker.com/compose/r
 command.
 
 ```console
-$ cd ~/solarsystem/
+$ cd ~/environment/solarsystem/
 $ docker compose up -d
 [+] Running 19/19
  ⠿ mongo Pulled                                    35.7s
