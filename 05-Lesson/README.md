@@ -280,6 +280,16 @@ the Nginx container, since the browsers on the Selenium nodes will be resolving
 that address (so it can't be `localhost`). We also need to specify that we want
 to run on the `selenium_default` network so our tests can reach the Hub.
 
+On AWS, you might be able to get the public IPv4 address with:
+
+```console
+$ curl http://169.254.169.254/latest/meta-data/public-ipv4
+18.224.95.18
+```
+
+Otherwise, you'll likely have to comb through the output of `ifconfig`,
+`ipconfig`, or `Get-NetIPAddress`.
+
 ```console
 $ docker run -it --rm --network selenium_default --volume ${PWD}:/usr/src/maven \
     --volume ${HOME}/.m2:/root/.m2 --workdir /usr/src/maven \
