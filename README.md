@@ -8,6 +8,25 @@ It covers working with Docker images and containers. It does not cover Docker
 installation, although if you can create an Ubuntu VM there is a script below
 that will install the required software.
 
+## Security Tools
+
+We don't look into security in this workshop, and there are some shortcuts that
+we take that are acceptable for sample code that won't work for a serious
+deployment.
+
+If you want some tools to tidy up and secure your containers better, here are a
+few to consider:
+
+* [Anchore Grype](https://github.com/anchore/grype)- [demo](https://youtu.be/3xRTui0FKjM)
+* [Aqua Security Trivy](https://github.com/aquasecurity/trivy)- [demo](https://youtu.be/5MPbWzxWLLk)
+* [Checkov by Bridgecrew](https://www.checkov.io/)- [demo](https://youtu.be/u0YsyZxDB1M)
+
+There is a demonstration of identifying the Spring4Shell vulnerability [using
+Trivy and Grype](https://youtu.be/mOfBcpJWwSs) as well. There is a longer
+discussion with more Kubernetes and container security tools as a
+[meetup](https://youtu.be/a5uPm1mPLKQ?t=1696) and [similar
+slides](https://www.slideshare.net/ggotimer/keeping-your-kubernetes-cluster-secure-254002353).
+
 ## Prerequisites
 
 To participate, you need to have a workstation with Docker installed and
