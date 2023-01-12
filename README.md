@@ -64,8 +64,8 @@ docker run -it --rm --volume ${pwd}:/usr/src/maven --volume $HOME/.m2:/root/.m2 
 In the cloud, using an AWS Cloud9 instance is the easiest environment to
 prepare. A default, free-tier `t2.micro` (1 GiB RAM + 1 vCPU) instance with
 10GiB of storage will suffice for the first 4 lessons. You'll need at least a
-`t3.medium` (4 GiB RAM + 2 vCPU) instance with 16GiB of storage for Lesson 5 to
-handle all the images and containers that run in that lesson.
+`t3.medium` or `t3a.medium` (4 GiB RAM + 2 vCPU) instance with 16GiB of storage
+for Lesson 5 to handle all the images and containers that run in that lesson.
 
 Once you start a Cloud9 instance and connect, follow the
 [Resize an Amazon EBS volume used by an
@@ -119,9 +119,9 @@ requirements.
 
 To complete the Docker Compose lesson (Lesson 5), you'll need the Compose CLI
 plugin for Docker installed. The `install-docker.sh` script handles that. The
-cloud instance will need to be at least a `t3a.medium` (4 GiB RAM + 2 vCPU)
-instance with 16 GiB of storage to handle all the images and containers that run
-in that lesson.
+cloud instance will need to be at least a `t3.medium` or `t3a.medium`
+(4 GiB RAM + 2 vCPU) instance with 16 GiB of storage to handle all the images and
+containers that run in that lesson.
 
 ## Final check
 
