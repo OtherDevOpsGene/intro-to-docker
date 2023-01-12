@@ -37,8 +37,8 @@ available.
 On Windows, having Docker Desktop installed with the Windows Subsystem for Linux
 will suffice. Ubuntu is the preferred operating system.
 
-If you use PowerShell, you'll need to change how some of the commands are
-written out.
+The commands are written out for a `bash` or similar shell. If you use
+PowerShell, you'll need to change how some of the commands are written.
 
 * The line continuation character in PowerShell is a backtick (`` ` ``) instead of
   a backslash (`` \ ``).
@@ -52,7 +52,7 @@ docker run -it --rm --volume ${PWD}:/usr/src/maven --volume ${HOME}/.m2:/root/.m
     --workdir /usr/src/maven maven:3.8.6-eclipse-temurin-17 mvn clean package
 ```
 
-becomes
+in PowerShell becomes
 
 ```powershell
 docker run -it --rm --volume ${pwd}:/usr/src/maven --volume $HOME/.m2:/root/.m2 `
