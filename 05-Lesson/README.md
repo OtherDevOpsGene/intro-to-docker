@@ -90,6 +90,14 @@ in the specified directory.
 The volumes to mount and ports to expose are generally listed on each image's
 page on Docker Hub.
 
+For example, on the [Docker Hub page for Mongo](https://hub.docker.com/_/mongo)
+there is a section on **Caveats > Where to Store Data**. There they point out
+that `/data/db` is "where MongoDB by default will write its data files." Our
+Compose file maps that to a [named
+volume](https://docs.docker.com/storage/volumes/), `mongodata`, that will be
+automatically created, if needed. All that data for MongoDB will be written
+there so it can persist across restarts.
+
 Start the cluster with the [docker compose up](https://docs.docker.com/compose/reference/up/)
 command.
 
@@ -123,8 +131,35 @@ Mongo Express in our case). Along with that, Compose handles name resolution so
 within the network the containers can use the service names as DNS names (e.g.,
 `php`, `mongo`).
 
-The Docker commands we've used so far all still work on the containers that
-Compose started (e.g., `docker ps`, `docker logs`).
+Compose also created the named volume, `mongodata`, to persist our MongoDB data
+across restarts. You can see the volume information via `docker`, including
+where it is written on disk (`/var/lib/docker/volumes/solarsystem_mongodata/_data`).
+
+```console
+$ docker volume ls
+DRIVER    VOLUME NAME
+local     solarsystem_mongodata
+
+$ docker volume inspect solarsystem_mongodata
+[
+    {
+        "CreatedAt": "2023-01-18T01:48:48Z",
+        "Driver": "local",
+        "Labels": {
+            "com.docker.compose.project": "solarsystem",
+            "com.docker.compose.version": "2.14.0",
+            "com.docker.compose.volume": "mongodata"
+        },
+        "Mountpoint": "/var/lib/docker/volumes/solarsystem_mongodata/_data",
+        "Name": "solarsystem_mongodata",
+        "Options": null,
+        "Scope": "local"
+    }
+]
+```
+
+The other Docker commands we've used so far all still work on the containers
+that Compose started (e.g., `docker ps`, `docker logs`).
 
 ```console
 $ docker ps
@@ -465,6 +500,9 @@ MongoDB container again.
 $ docker volume rm solarsystem_mongodata
 solarsystem_mongodata
 ```
+
+If you don't remove the named volume, the data will survive our next restart
+(meaning Pluto will still be a planet, to us anyway).
 
 You'll have to run `docker compose rm` in the `selenium` directory as well.
 Adding `--stop --force` will stop the containers and remove them without
