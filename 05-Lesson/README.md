@@ -90,13 +90,13 @@ in the specified directory.
 The volumes to mount and ports to expose are generally listed on each image's
 page on Docker Hub.
 
-For example, on the [Docker Hub page for Mongo](https://hub.docker.com/_/mongo)
+For example, on the [Docker Hub page for Mongo](https://hub.docker.com/_/mongo),
 there is a section on **Caveats > Where to Store Data**. There they point out
 that `/data/db` is "where MongoDB by default will write its data files." Our
 Compose file maps that to a [named
-volume](https://docs.docker.com/storage/volumes/), `mongodata`, that will be
-automatically created, if needed. All that data for MongoDB will be written
-there so it can persist across restarts.
+volume](https://docs.docker.com/storage/volumes/), `mongodata`, which will be
+automatically created if needed. All that data for MongoDB will be written
+there to persist across restarts.
 
 Start the cluster with the [docker compose up](https://docs.docker.com/compose/reference/up/)
 command.
@@ -132,8 +132,10 @@ within the network the containers can use the service names as DNS names (e.g.,
 `php`, `mongo`).
 
 Compose also created the named volume, `mongodata`, to persist our MongoDB data
-across restarts. You can see the volume information via `docker`, including
-where it is written on disk (`/var/lib/docker/volumes/solarsystem_mongodata/_data`).
+across restarts. You can see information about the volumes using [docker
+volume](https://docs.docker.com/engine/reference/commandline/volume/), including
+all the named volumes (`docker volume ls`) and where the data written on disk
+(`/var/lib/docker/volumes/solarsystem_mongodata/_data`, via `docker volume inspect`).
 
 ```console
 $ docker volume ls
