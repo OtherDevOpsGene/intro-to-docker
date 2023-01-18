@@ -93,9 +93,9 @@ page on Docker Hub.
 For example, on the [Docker Hub page for Mongo](https://hub.docker.com/_/mongo),
 there is a section on **Caveats > Where to Store Data**. There they point out
 that `/data/db` is "where MongoDB by default will write its data files." Our
-Compose file maps that to a [named
+Compose file maps that directory to a [named
 volume](https://docs.docker.com/storage/volumes/), `mongodata`, which will be
-automatically created if needed. All that data for MongoDB will be written
+automatically created if needed. All the data for MongoDB will be written
 there to persist across restarts.
 
 Start the cluster with the [docker compose up](https://docs.docker.com/compose/reference/up/)
