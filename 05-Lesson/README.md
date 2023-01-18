@@ -134,8 +134,9 @@ within the network the containers can use the service names as DNS names (e.g.,
 Compose also created the named volume, `mongodata`, to persist our MongoDB data
 across restarts. You can see information about the volumes using [docker
 volume](https://docs.docker.com/engine/reference/commandline/volume/), including
-all the named volumes (`docker volume ls`) and where the data written on disk
-(`/var/lib/docker/volumes/solarsystem_mongodata/_data`, via `docker volume inspect`).
+all the named volumes (`docker volume ls`) and where the data files are written
+on disk (`/var/lib/docker/volumes/solarsystem_mongodata/_data`, via `docker
+volume inspect`).
 
 ```console
 $ docker volume ls
