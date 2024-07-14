@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongoexpress
+  namespace: solarsystem
+  labels:
+    name: mongoexpress
+spec:
+  selector:
+    name: mongoexpress
+  ports:
+    - name: althttp
+      port: 8080
+      targetPort: 8081

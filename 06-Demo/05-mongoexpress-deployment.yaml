@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongoexpress
+  namespace: solarsystem
+  labels:
+    name: mongoexpress
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: mongoexpress
+  template:
+    metadata:
+      labels:
+        name: mongoexpress
+    spec:
+      containers:
+        - image: mongo-express:latest
+          name: mongoexpress
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8081
+          securityContext:
+            privileged: false
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+              - ALL
+      restartPolicy: Always

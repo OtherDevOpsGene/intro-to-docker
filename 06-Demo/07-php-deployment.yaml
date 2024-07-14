@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php
+  namespace: solarsystem
+  labels:
+    name: php
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: php
+  template:
+    metadata:
+      labels:
+        name: php
+    spec:
+      containers:
+        - image: php
+          name: php
+          ports:
+            - containerPort: 9000
+          volumeMounts:
+            - mountPath: /docroot/index.php
+              subPath: index.php
+              readOnly: true
+              name: docroot
+            - mountPath: /usr/local/etc/php-fpm.d/zz-log.conf
+              subPath: zz-log.conf
+              readOnly: true
+              name: php-log-conf
+      restartPolicy: Always
+      volumes:
+        - name: docroot
+          configMap:
+            name: docroot
+            items:
+              - key: index.php
+                path: index.php
+        - name: php-log-conf
+          configMap:
+            name: php-log-conf
+            items:
+              - key: zz-log.conf
+                path: zz-log.conf

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  namespace: solarsystem
+  labels:
+    name: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: nginx
+  template:
+    metadata:
+      labels:
+        name: nginx
+    spec:
+      containers:
+        - image: nginx:latest
+          name: nginx
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - mountPath: /docroot/planets.css
+              subPath: planets.css
+              readOnly: true
+              name: docroot
+            - mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+              readOnly: true
+              name: nginx-config
+      restartPolicy: Always
+      volumes:
+        - name: docroot
+          configMap:
+            name: docroot
+            items:
+              - key: planets.css
+                path: planets.css
+        - name: nginx-config
+          configMap:
+            name: nginx-config
+            items:
+              - key: nginx.conf
+                path: nginx.conf

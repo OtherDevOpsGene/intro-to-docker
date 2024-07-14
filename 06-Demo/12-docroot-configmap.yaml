@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: docroot
+  namespace: solarsystem
+data:
+  index.php: |
+    <!DOCTYPE html>
+    <html lang="en" xml:lang="en">
+      <head>
+        <title>Planets in the Solar System</title>
+        <link rel="stylesheet" href="/planets.css" />
+      </head>
+
+      <body>
+        <h1>Planets in the Solar System</h1>
+
+        <p>This is a dynamic PHP page retrieving data from MongoDB.</p>
+
+        <?php
+          error_reporting(E_ALL);
+          try {
+            $mongo = new MongoDB\Driver\Manager('mongodb://mongo');
+            $query = new MongoDB\Driver\Query([]);
+            $docs = $mongo->executeQuery("solarsystemdb.planets", $query);
+
+          } catch (MongoDB\Driver\Exception\Exception $e) {
+            ?>
+              <ul class="error">
+                <li>Exception: <?= $e->getMessage() ?></li>
+                <li>In file: <?= $e->getFile() ?></li>
+                <li>On line: <?= $e->getLine() ?></li>
+              </ul>
+              <p class="error">You may want to wait 10 seconds or so for the database to start and try again.</p>
+            <?php
+          }
+        ?>
+
+        <table>
+          <caption>Planets in the Solar System</caption>
+          <thead>
+            <tr>
+              <th id="name">Name</th>
+              <th id="radius">Radius<br/>(km)</th>
+              <th id="year">Year<br/>(Earth days)</th>
+            </tr>
+          </thead>
+          
+          <tbody>
+            <?php foreach ($docs as $planet) { ?>
+              <tr><td><?= $planet->name ?></td><td><?= $planet->radius ?></td><td><?= $planet->year ?></td></tr>
+            <?php } ?>
+          </tbody>
+        </table>
+
+      </body>
+    </html>
+
+  planets.css: |
+    body { font-family: Arial, Helvetica, sans-serif; }
+    table, table th, table td { border: 1px solid black; border-collapse: collapse; }
+    table th, table td { padding: 0.4em; text-align: right; }
+    th { background-color: #00cc33; color: white; }
+    table tr:nth-child(even) { background-color: #EFF2F5; }
+    table th:nth-child(1), table td:nth-child(1) { text-align: left; }
+    table { caption-side: bottom; }
+    .error { color: red; }

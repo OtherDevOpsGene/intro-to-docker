@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: php-log-conf
+  namespace: solarsystem
+data:
+  zz-log.conf: |
+    clear_env = no
+
+    php_admin_flag[log_errors] = on
+    php_flag[display_errors] = off

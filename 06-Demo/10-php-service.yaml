@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: php
+  namespace: solarsystem
+  labels:
+    name: php
+spec:
+  selector:
+    name: php
+  ports:
+    - name: fastcgi
+      port: 9000
+      targetPort: 9000
