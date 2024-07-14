@@ -10,9 +10,8 @@ that will install the required software.
 
 ## Security Tools
 
-We don't look into security in this workshop, and there are some shortcuts that
-we take that are acceptable for sample code that won't work for a serious
-deployment.
+There are some shortcuts that we take that are acceptable for sample code that
+won't work for a serious deployment.
 
 If you want some tools to tidy up and secure your containers better, here are a
 few to consider:
@@ -30,7 +29,8 @@ slides](https://www.slideshare.net/ggotimer/keeping-your-kubernetes-cluster-secu
 ## Prerequisites
 
 To participate, you need to have a workstation with Docker installed and
-available.
+available. If you are attending a workshop, Gene may have created a
+pre-configured AWS Cloud9 environment for you.
 
 ### Windows
 

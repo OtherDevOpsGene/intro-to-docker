@@ -49,8 +49,6 @@ $ docker build --tag otherdevopsgene/chuck-norris-2 .
  => => exporting layers                                                                         0.5s
  => => writing image sha256:fbe35e3e733cfc52a0052a9cd98f6ac4eec6d65aa3243701e497e67dabfccc1c    0.0s
  => => naming to docker.io/otherdevopsgene/chuck-norris-2                                       0.0s
-
-Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
  ```
 
 * `--tag otherdevopsgene/chuck-norris-2` tells Docker to name the image
@@ -82,8 +80,6 @@ $ docker build --tag otherdevopsgene/chuck-norris-2 .
  => => exporting layers                                                                         0.0s
  => => writing image sha256:fbe35e3e733cfc52a0052a9cd98f6ac4eec6d65aa3243701e497e67dabfccc1c    0.0s
  => => naming to docker.io/otherdevopsgene/chuck-norris-2                                       0.0s
-
-Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
 ```
 
 If you need it, there is a `--no-cache` option.

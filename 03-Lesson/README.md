@@ -56,8 +56,6 @@ $ docker build --tag otherdevopsgene/helloworld .
  => => exporting layers                                                                                                                                     4.7s
  => => writing image sha256:230b174db9f728d6bf94708f84f0ed170a5ab0ad11241cb34bc81b8595bfa12e                                                                0.0s
  => => naming to docker.io/otherdevopsgene/helloworld                                                                                                       0.0s
-
-Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
  ```
 
 Despite being a Hello World program, there is quite a bit we have to install for
@@ -153,8 +151,6 @@ $ docker build --tag otherdevopsgene/helloworld .
  => => writing image sha256:b3f1c4bfb86a118dec189c50d8a79d56ebcb56df250e943257bf7ddfab95e4da                                                                                 0.0s
  => => naming to docker.io/otherdevopsgene/helloworld                                                                                                                        0.0s
 
-Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
-
 $ docker run otherdevopsgene/helloworld
 Hello, world! The current time is 8:33:50 PM on November 26, 2022.
 $ docker tag otherdevopsgene/helloworld otherdevopsgene/helloworld:small
@@ -206,6 +202,63 @@ Using multi-stage builds and more targeted, smaller base images to shrink Docker
 images to as small as feasible is a common theme in Docker. There is more
 information available on
 [Dockerfile best practices](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/).
+
+## Examining layers
+
+While we are looking at our image, we should look a little deeper into the
+layers that were created. [Dive](https://github.com/wagoodman/dive) lets us look
+at the files on each layer of the image.
+
+```sh
+dive otherdevopsgene/helloworld:small
+```
+
+This will bring up an interactive, terminal-based application to let you look at
+details about each layer, including looking at the files on that layer
+(<kbd>Tab</kbd>> to switch between layer details and layer contents). You can
+also toggle the files that were added, removed, or modified in each layer. A
+menu appears at the bottom of the screen when you are in the `Current Layer
+Contents` view. <kbd>Ctrl</kbd>+<kbd>C</kbd> to quit.
+
+## Checking our code
+
+We can use a static analysis tool (a tool that looks at source code) to see what
+mistakes or omissions we might have made.
+
+[Checkov](https://www.checkov.io/) is a versatile choice that works on our
+`Dockerfile`s, and even Ansible playbooks or Kubernetes manifests. Use `-f` to
+run against a file, or `-d` to run against an entire directory.
+
+```console
+$ checkov -f Dockerfile
+[ dockerfile framework ]: 100%|████████████████████|[1/1], Current File Scanned=Dockerfile
+[ secrets framework ]: 100%|████████████████████|[1/1], Current File Scanned=Dockerfile
+
+       _               _
+   ___| |__   ___  ___| | _______   __
+  / __| '_ \ / _ \/ __| |/ / _ \ \ / /
+ | (__| | | |  __/ (__|   < (_) \ V /
+  \___|_| |_|\___|\___|_|\_\___/ \_/
+
+By Prisma Cloud | version: 3.2.189
+
+dockerfile scan results:
+
+Passed checks: 55, Failed checks: 3, Skipped checks: 0
+
+Check: CKV_DOCKER_11: "Ensure From Alias are unique for multistage builds."
+        PASSED for resource: Dockerfile.
+        File: Dockerfile:1-14
+        Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/docker-policies/docker-policy-index/ensure-docker-from-alias-is-unique-for-multistage-builds
+Check: CKV_DOCKER_9: "Ensure that APT isn't used"
+        PASSED for resource: Dockerfile.
+        File: Dockerfile:1-14
+        Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/docker-policies/docker-policy-index/ensure-docker-apt-is-not-used
+```
+
+Checkov provides links to explain each of the checks and in many cases advice
+for fixing any problems that are found. If you want more details, you can get a
+free account to [integrate with Prisma Cloud](https://www.checkov.io/2.Basics/Visualizing%20Checkov%20Output.html).
 
 ## Push to Docker Hub
 
@@ -348,8 +401,6 @@ $ docker build --tag otherdevopsgene/helloworld:local .
  => => exporting layers                                                                                                                         0.0s
  => => writing image sha256:ebd78a24c0dad737f04e0898bb255e3ccad75438b6ec50431c28f834fed33f39                                                    0.0s
  => => naming to docker.io/otherdevopsgene/helloworld:local                                                                                     0.0s
-
-Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
 
 $ docker run otherdevopsgene/helloworld:local
 Hello, world! The current time is 8:58:25 PM on November 26, 2022.

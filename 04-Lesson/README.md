@@ -50,6 +50,13 @@ point to the new web site on port 8080. If you are running locally, you might be
 able to hit <http://localhost:8080/>. Otherwise, use the IP address of your host
 (e.g., <http://555.666.777.888:8080/>).
 
+If you don't know your IP address, try
+
+```console
+$ curl http://169.254.169.254/latest/meta-data/public-ipv4
+18.224.95.18
+```
+
 You should see the default Nginx page in your browser and the browser access in
 the logs.
 
@@ -140,8 +147,35 @@ You'll see [index.html](https://github.com/OtherDevOpsGene/solarsystem/blob/main
 On the host, any changes you make to `index.html` or any files you add to the
 `solarsystem/nginx/docroot/` directory will be served up by Nginx.
 
-When you are done, you can stop and remove the container in one step with
-`docker rm --force`.
+## Finding versions
+
+Normally, we wouldn't just grab the `latest` version for production. We've been
+developing and testing with some particular version, and we should go live with
+that version as well.
+
+But how to know what versions are available? Some registries, like [Docker
+Hub](https://hub.docker.com), allow you to browse the tags to see what versions
+of an image are hosted.
+
+We can also use a tool like
+[Crane](https://github.com/google/go-containerregistry) to list all the
+available tags.
+
+```console
+$ crane ls otherdevopsgene/hello-world-go
+latest
+main
+v0.2.0
+v1.0.0
+```
+
+In the case of some images, like `nginx` which has about 700 tags, the registry
+listing with explanations might be the reasonable way to go.
+
+## Clean up
+
+When you are done, you can stop and remove the static web site container in one
+step with `docker rm --force`.
 
 ```console
 $ docker rm --force www

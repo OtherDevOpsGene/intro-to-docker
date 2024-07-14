@@ -17,8 +17,6 @@ In the `solarsystem/` Git repository you cloned in the previous lesson there is 
 file.
 
 ```yaml
-version: '3'
-
 services:
   nginx:
     image: nginx:latest
@@ -188,6 +186,111 @@ passing the request for the default index page (aka `index.php`) to the `php`
 container on port 9000 because of our [site.conf](https://github.com/OtherDevOpsGene/solarsystem/blob/main/nginx/site.conf#L12)
 configuration.
 
+## Scanning container images
+
+Whether we are using them as base images or just running third-party
+applications from an image, we should check to see is they are safe to use. A
+lot of that depends on if they have known vulnerabilities.
+
+We can check that with [Aqua Security Trivy](https://github.com/aquasecurity/trivy)
+and [Anchore Grype](https://github.com/anchore/grype). Although they do very
+similar jobs, and overlap substantially, they each find problems that the other
+does not and they work well in tandem, IMHO.
+
+```console
+$ trivy image mongo-express:latest
+2024-07-14T21:49:01Z    INFO    Vulnerability scanning is enabled
+2024-07-14T21:49:01Z    INFO    Secret scanning is enabled
+2024-07-14T21:49:01Z    INFO    If your scanning is slow, please try '--scanners vuln' to disable secret scanning
+2024-07-14T21:49:01Z    INFO    Please see also https://aquasecurity.github.io/trivy/v0.53/docs/scanner/secret#recommendation for faster secret detection
+2024-07-14T21:49:11Z    INFO    Detected OS     family="alpine" version="3.18.6"
+2024-07-14T21:49:11Z    INFO    [alpine] Detecting vulnerabilities...   os_version="3.18" repository="3.18" pkg_num=22
+2024-07-14T21:49:11Z    INFO    Number of language-specific files       num=1
+2024-07-14T21:49:11Z    INFO    [node-pkg] Detecting vulnerabilities...
+2024-07-14T21:49:11Z    WARN    Using severities from other vendors for some vulnerabilities. Read https://aquasecurity.github.io/trivy/v0.53/docs/scanner/vulnerability#severity-selection for details.
+2024-07-14T21:49:11Z    INFO    Table result includes only package filenames. Use '--format json' option to get the full path to the package file.
+
+mongo-express:latest (alpine 3.18.6)
+====================================
+Total: 20 (UNKNOWN: 0, LOW: 2, MEDIUM: 18, HIGH: 0, CRITICAL: 0)
+
+┌───────────────┬────────────────┬──────────┬────────┬───────────────────┬───────────────┬───────────────────────────────────────────────────────────┐
+│    Library    │ Vulnerability  │ Severity │ Status │ Installed Version │ Fixed Version │                           Title                           │
+├───────────────┼────────────────┼──────────┼────────┼───────────────────┼───────────────┼───────────────────────────────────────────────────────────┤
+│ busybox       │ CVE-2023-42363 │ MEDIUM   │ fixed  │ 1.36.1-r5         │ 1.36.1-r7     │ busybox: use-after-free in awk                            │
+│               │                │          │        │                   │               │ https://avd.aquasec.com/nvd/cve-2023-42363                │
+│               ├────────────────┤          │        │                   │               ├───────────────────────────────────────────────────────────┤
+│               │ CVE-2023-42364 │          │        │                   │               │ busybox: use-after-free                                   │
+│               │                │          │        │                   │               │ https://avd.aquasec.com/nvd/cve-2023-42364                │
+│               ├────────────────┤          │        │                   │               ├───────────────────────────────────────────────────────────┤
+│               │ CVE-2023-42365 │          │        │                   │               │ busybox: use-after-free                                   │
+│               │                │          │        │                   │               │ https://avd.aquasec.com/nvd/cve-2023-42365                │
+│               ├────────────────┤          │        │                   ├───────────────┼───────────────────────────────────────────────────────────┤
+│               │ CVE-2023-42366 │          │        │                   │ 1.36.1-r6     │ busybox: A heap-buffer-overflow                           │
+│               │                │          │        │                   │               │ https://avd.aquasec.com/nvd/cve-2023-42366                │
+├───────────────┼────────────────┤          │        │                   ├───────────────┼───────────────────────────────────────────────────────────┤
+│ busybox-binsh │ CVE-2023-42363 │          │        │                   │ 1.36.1-r7     │ busybox: use-after-free in awk                            │
+│               │                │          │        │                   │               │ https://avd.aquasec.com/nvd/cve-2023-42363                │
+│               ├────────────────┤          │        │                   │               ├───────────────────────────────────────────────────────────┤
+│               │ CVE-2023-42364 │          │        │                   │               │ busybox: use-after-free                                   │
+│               │                │          │        │                   │               │ https://avd.aquasec.com/nvd/cve-2023-42364                │
+│               ├────────────────┤          │        │                   │               ├───────────────────────────────────────────────────────────┤
+```
+
+and
+
+```console
+$ grype mongo-express:latest
+ ✔ Vulnerability DB                [no update available]
+ ✔ Loaded image mongo-express:latest
+ ✔ Parsed image sha256:870141b735e7d896bde590765c341cdc64fb6d3284b5f6a81f70ec936e4d0b83
+ ✔ Cataloged contents 9eea5c4fdbbc1b097571896e7b30a3c41b16934b2f1235ed54b12f81d64353c0
+   ├── ✔ Packages                        [626 packages]
+   ├── ✔ File digests                    [163 files]
+   ├── ✔ File metadata                   [163 locations]
+   └── ✔ Executables                     [60 executables]
+ ✔ Scanned for vulnerabilities     [32 vulnerability matches]
+   ├── by severity: 3 critical, 2 high, 19 medium, 2 low, 0 negligible (6 unknown)
+   └── by status:   28 fixed, 4 not-fixed, 0 ignored
+[0006]  WARN unable to extract licenses from javascript package.json: unmarshal failed
+NAME             INSTALLED  FIXED-IN   TYPE    VULNERABILITY        SEVERITY
+@babel/traverse  7.19.6     7.23.2     npm     GHSA-67hx-6x53-jw92  Critical
+busybox          1.36.1-r5  1.36.1-r6  apk     CVE-2023-42366       Medium
+busybox          1.36.1-r5  1.36.1-r7  apk     CVE-2023-42365       Medium
+busybox          1.36.1-r5  1.36.1-r7  apk     CVE-2023-42364       Medium
+busybox          1.36.1-r5  1.36.1-r7  apk     CVE-2023-42363       Medium
+busybox-binsh    1.36.1-r5  1.36.1-r6  apk     CVE-2023-42366       Medium
+busybox-binsh    1.36.1-r5  1.36.1-r7  apk     CVE-2023-42365       Medium
+busybox-binsh    1.36.1-r5  1.36.1-r7  apk     CVE-2023-42364       Medium
+busybox-binsh    1.36.1-r5  1.36.1-r7  apk     CVE-2023-42363       Medium
+es5-ext          0.10.62    0.10.63    npm     GHSA-4gmj-3p3h-gm8h  Low
+express          4.18.2     4.19.2     npm     GHSA-rv95-896h-c2vc  Medium
+fast-xml-parser  4.0.11     4.1.2      npm     GHSA-x3cc-x39p-42qx  Medium
+ip               2.0.0                 npm     GHSA-2p57-rm9w-gvfp  High
+ip               2.0.0      2.0.1      npm     GHSA-78xj-cgh5-2h22  Low
+json5            2.2.1      2.2.2      npm     GHSA-9c47-m6qq-7p4h  High
+libcrypto3       3.1.4-r5   3.1.6-r0   apk     CVE-2024-5535        Critical
+libcrypto3       3.1.4-r5   3.1.6-r0   apk     CVE-2024-4741        Unknown
+libcrypto3       3.1.4-r5   3.1.5-r0   apk     CVE-2024-4603        Unknown
+libcrypto3       3.1.4-r5   3.1.4-r6   apk     CVE-2024-2511        Unknown
+libssl3          3.1.4-r5   3.1.6-r0   apk     CVE-2024-5535        Critical
+libssl3          3.1.4-r5   3.1.6-r0   apk     CVE-2024-4741        Unknown
+libssl3          3.1.4-r5   3.1.5-r0   apk     CVE-2024-4603        Unknown
+libssl3          3.1.4-r5   3.1.4-r6   apk     CVE-2024-2511        Unknown
+mongo-express    1.0.2                 npm     GHSA-fffg-cwc9-xvj7  Medium
+mongodb          4.13.0     4.17.0     npm     GHSA-vxvm-qww3-2fh7  Medium
+node             18.20.3               binary  CVE-2024-22020       Medium
+node             18.20.3               binary  CVE-2024-21890       Medium
+semver           6.3.0      6.3.1      npm     GHSA-c2qf-rxjj-qqgw  Medium
+ssl_client       1.36.1-r5  1.36.1-r6  apk     CVE-2023-42366       Medium
+ssl_client       1.36.1-r5  1.36.1-r7  apk     CVE-2023-42365       Medium
+ssl_client       1.36.1-r5  1.36.1-r7  apk     CVE-2023-42364       Medium
+ssl_client       1.36.1-r5  1.36.1-r7  apk     CVE-2023-42363       Medium
+```
+
+This vulnerability information can help you make informed decisions about using
+third-party images and what security measures might need to be implemented.
+
 ## Bringing up Selenium Grid
 
 In the `solarsystem/selenium` directory, there is a second
@@ -195,7 +298,6 @@ In the `solarsystem/selenium` directory, there is a second
 file.
 
 ```yaml
-version: "3"
 services:
   chrome:
     image: selenium/node-chrome:4.6.0-20221104
@@ -394,6 +496,8 @@ We can add Pluto as a planet by adding some data to the MongoDB. You can explore
 the MongoDB database via Mongo Express at <http://localhost:8080/> (or use the
 IP address of your host, <http://555.666.777.888:8080/>).
 
+If you are asked to login, the username is `admin` and the password is `pass`.
+
 Visit <http://localhost:8080/db/solarsystemdb/planets> to see the `planets`
 collection in the `solarsystemdb` database (or use the IP address of your host,
 <http://555.666.777.888:8080/db/solarsystemdb/planets>) and select `New Document`.
@@ -469,7 +573,21 @@ $ docker compose up -d --scale firefox=1 --scale chrome=1
 
 As mentioned earlier, we would generally use a container orchestration tool like
 [Kubernetes](https://kubernetes.io/) to handle dynamically scaling in a
-production system. We'll look at that next.
+production system.
+
+## What can we support
+
+Spinning containers up and down easily is convenient, but how do I know if my
+server is up to the task? When will I run out of available CPU or memory.
+
+Well, just like we can use `top` or `htop` to look at processes running on our
+host system, we can use a tool called [ctop](https://ctop.sh/) to see a live
+view of what resources containers are using. (*Note:* Since containers are just
+processes, we can use `top` or `htop` as well, but they don't break things down
+container by container for us.)
+
+If you have `ctop` installed, try bringing it up while scaling your Selenium
+Grid up and down, just to see the effects. Use `h` to show help, `q` to quit.
 
 ## Clean up
 
